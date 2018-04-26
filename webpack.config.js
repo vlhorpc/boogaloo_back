@@ -17,5 +17,14 @@ module.exports = {
   output: {
     filename: 'build.js'
   },
-  externals: nodeModules
-}
+  externals: nodeModules,
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader"
+      }
+    ]
+  }
+};
