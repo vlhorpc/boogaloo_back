@@ -1,7 +1,7 @@
-const dishRouter  = require('./dishRouter');
+const dishRouter = require('./dishRouter');
 const promoRouter = require('./promoRouter');
 const indexRouter = require('./indexRouter');
-const notFoundRouter = require('./notFoundRouter');
+// const notFoundRouter = require('./notFoundRouter');
 
 module.exports = (app) => {
   app.use('/dishes', dishRouter);

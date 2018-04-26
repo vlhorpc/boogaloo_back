@@ -6,16 +6,16 @@ const promoRouter = express.Router();
 promoRouter.use(bodyParser.json());
 
 promoRouter.route('/')
-  .all((req,res,next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     next();
   })
-  .get((req,res) => {
+  .get((req, res) => {
     res.end('Will send all the promos to you!');
   })
   .post((req, res) => {
-    res.end('Will add the promo: ' + req.body.name + ' with details: ' + req.body.description);
+    res.end(`Will add the promo: ${req.body.name} with details: ${req.body.description}`);
   })
   .put((req, res) => {
     res.statusCode = 403;
@@ -26,24 +26,24 @@ promoRouter.route('/')
   });
 
 promoRouter.route('/:promoId')
-  .all((req,res,next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     next();
   })
-  .get((req,res) => {
-    res.end('Will send details of the promo: ' + req.params.promoId +' to you!');
+  .get((req, res) => {
+    res.end(`Will send details of the promo: ${req.params.promoId} to you!`);
   })
   .post((req, res) => {
     res.statusCode = 403;
-    res.end('POST operation not supported on /promotions/'+ req.params.promoId);
+    res.end(`POST operation not supported on /promotions/${req.params.promoId}`);
   })
   .put((req, res) => {
-    res.write('Updating the promo: ' + req.params.promoId + '\n');
-    res.end('Will update the promo: ' + req.body.name + ' with details: ' + req.body.description);
+    res.write(`Updating the promo: ${req.params.promoId}\n`);
+    res.end(`Will update the promo: ${req.body.name} with details: ${req.body.description}`);
   })
   .delete((req, res) => {
-    res.end('Deleting promo: ' + req.params.promoId);
+    res.end(`Deleting promo: ${req.params.promoId}`);
   });
 
 module.exports = promoRouter;
