@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./dist/build",
     "dev": "nodemon ./bin/www",
-    "build": "webpack --config webpack.config.js --display-error-details"
+    "build": "webpack --config webpack.config.js --display-error-details",
+    "lint": "node_modules/.bin/eslint --ignore-path ./.eslintignore *",
+    "lint-fix": "node_modules/.bin/eslint --ignore-path ./.eslintignore * --fix"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
