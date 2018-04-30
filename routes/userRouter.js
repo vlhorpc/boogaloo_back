@@ -8,7 +8,9 @@ userRouter.use(bodyParser.json());
 
 userRouter.route('/')
   .get((req, res, next) => {
-    models.Users.findAll().then((users) => {
+    models.Users.findAll({
+      include: [models.Tasks]
+    }).then((users) => {
       res.json(users);
     }).catch(() => {
       res.statusCode = 404;

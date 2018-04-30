@@ -5,9 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users'
   });
 
-  // User.associate = function(models) {
-  //   models.User.hasMany(models.Task);
-  // };
+  Users.associate = (models) => {
+    console.log('models', models);
+    models.Users.hasMany(models.Tasks);
+  };
 
   return Users;
 };
