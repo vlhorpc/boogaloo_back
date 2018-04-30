@@ -7,7 +7,9 @@
     "dev": "nodemon ./bin/www",
     "build": "webpack --config webpack.config.js --display-error-details",
     "lint": "node_modules/.bin/eslint --ignore-path ./.eslintignore *",
-    "lint-fix": "node_modules/.bin/eslint --ignore-path ./.eslintignore * --fix"
+    "lint-fix": "node_modules/.bin/eslint --ignore-path ./.eslintignore * --fix",
+    "migration-generate": "node_modules/.bin/sequelize migration:create --name",
+    "migration-run": "node_modules/.bin/sequelize db:migrate"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -22,6 +24,7 @@
     "mysql2": "^1.5.3",
     "pug": "2.0.0-beta11",
     "sequelize": "^4.37.6",
+    "sequelize-cli": "^4.0.0",
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
