@@ -14,7 +14,7 @@ const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url);
 
 connect.then(() => {
-  console.log('Connected correctly to Database');
+  console.log('Connected correctly to NoSQL Database');
 }, (err) => { console.log(err); });
 
 // const index = require('./routes/indexRouter');

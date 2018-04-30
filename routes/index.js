@@ -1,10 +1,12 @@
 const dishRouter = require('./dishRouter');
 const promoRouter = require('./promoRouter');
 const indexRouter = require('./indexRouter');
+const userRouter = require('./userRouter');
 // const notFoundRouter = require('./notFoundRouter');
 
-module.exports = (app) => {
+const routesList = (app, sequelize) => {
   app.use('/dishes', dishRouter);
+  app.use('/users', userRouter);
   app.use('/promotions', promoRouter);
   app.use('/', indexRouter);
 
@@ -28,3 +30,4 @@ module.exports = (app) => {
   });
 };
 
+module.exports = routesList;
