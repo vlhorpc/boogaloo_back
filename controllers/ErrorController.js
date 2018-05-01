@@ -17,6 +17,20 @@ class ErrorController {
     res.json(error);
     res.end();
   }
+
+  returnErrorMissedParams(res, data) {
+    const error = {
+      meta: {
+        code: 422,
+        message: 'WRONG PARAMETRS'
+      },
+      data
+    };
+    res.statusCode = 422;
+    res.setHeader('Content-type', 'application/json');
+    res.json(error);
+    res.end();
+  }
 }
 
 module.exports = ErrorController;

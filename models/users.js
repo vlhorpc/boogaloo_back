@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id'
       }
     );
+    models.Users.hasOne(models.UsersTokens, {
+      foreignKey: 'user_id',
+      sourceKey: 'id',
+      as: 'token'
+    });
   };
 
   return Users;
