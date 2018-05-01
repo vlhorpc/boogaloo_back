@@ -3,8 +3,7 @@ const ErrorController = require('./ErrorController');
 const ResponseController = require('./ResponseController');
 const crypto = require('crypto');
 const url = require('url');
-
-const secret = 'boogaloo';
+const moment = require('moment');
 
 class SignController {
   constructor() {}
@@ -53,32 +52,30 @@ class SignController {
         .digest('hex');
 
       models.Users.findOne({
-        where: { login: login, password: hashedPassword },
-        include: [{
-          model: models.UsersTokens, as: 'token'
-        }]
+        where: { login: login, password: hashedPassword }
       }).then((user) => {
         if (user) {
-          if (!user.token) {
+          models.UsersTokens.findOne({
+            where: { user_id: user.id }
+          }).then((userToken) => {
             const response = new ResponseController();
-            const userToken = {
-              user_id: user.id,
-              token: this.generateToken(login, password)
-            };
-            models.UsersTokens.create(userToken).then((token) => {
-              return response.returnSuccessResponse(res, { user, token });
-            });
-          } else {
-            models.UsersTokens.findOne({
-              where: { user_id: user.id }
-            }).then((userToken) => {
+            if (userToken) {
               userToken.token = this.generateToken(login, password);
+              userToken.expire_date = this.returnExpireDate();
               userToken.save().then((savedToken) => {
-                const response = new ResponseController();
                 return response.returnSuccessResponse(res, { user, token: savedToken });
               });
-            });
-          }
+            } else {
+              const newwUserToken = {
+                user_id: user.id,
+                token: this.generateToken(login, password),
+                expire_date: this.returnExpireDate()
+              };
+              models.UsersTokens.create(newwUserToken).then((token) => {
+                return response.returnSuccessResponse(res, { user, token });
+              });
+            }
+          })
         } else {
           const customError = {
             res,
@@ -96,6 +93,11 @@ class SignController {
   generateToken(login, password) {
     return crypto.createHmac('sha256', login + password + (new Date()))
       .digest('hex');
+  }
+
+  returnExpireDate() {
+    const currentDate = moment();
+    return moment(currentDate).add(3, 'days');
   }
 }
 
