@@ -53,17 +53,32 @@ class SignController {
         .digest('hex');
 
       models.Users.findOne({
-        where: { login: login, password: hashedPassword }
+        where: { login: login, password: hashedPassword },
+        include: [{
+          model: models.UsersTokens, as: 'token'
+        }]
       }).then((user) => {
         if (user) {
-          const response = new ResponseController();
-          const userToken = {
-            user_id: user.id,
-            token: this.generateToken(login, password)
-          };
-          models.UsersTokens.create(userToken).then((token) => {
-            return response.returnSuccessResponse(res, { user, token });
-          });
+          if (!user.token) {
+            const response = new ResponseController();
+            const userToken = {
+              user_id: user.id,
+              token: this.generateToken(login, password)
+            };
+            models.UsersTokens.create(userToken).then((token) => {
+              return response.returnSuccessResponse(res, { user, token });
+            });
+          } else {
+            models.UsersTokens.findOne({
+              where: { user_id: user.id }
+            }).then((userToken) => {
+              userToken.token = this.generateToken(login, password);
+              userToken.save().then((savedToken) => {
+                const response = new ResponseController();
+                return response.returnSuccessResponse(res, { user, token: savedToken });
+              });
+            });
+          }
         } else {
           const customError = {
             res,
@@ -79,7 +94,7 @@ class SignController {
   }
 
   generateToken(login, password) {
-    return crypto.createHmac('sha256', login + password)
+    return crypto.createHmac('sha256', login + password + (new Date()))
       .digest('hex');
   }
 }
