@@ -1,8 +1,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users_tokens',
+    queryInterface.createTable('users_tokens',
       {
-        id: Sequelize.INTEGER,
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
         user_id: Sequelize.INTEGER,
         token: Sequelize.STRING,
         expire_date: Sequelize.DATE,
@@ -10,6 +14,17 @@ module.exports = {
         updatedAt: Sequelize.DATE
       }
     );
+    queryInterface.addConstraint('users_tokens', ['user_id'], {
+      type: 'foreign key',
+      name: 'users_tokens',
+      references: {
+        table: 'users',
+        field: 'id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    });
+    return queryInterface;
   },
 
   down: (queryInterface, Sequelize) => {
