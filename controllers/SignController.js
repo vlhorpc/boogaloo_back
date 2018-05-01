@@ -90,6 +90,29 @@ class SignController {
     }
   }
 
+  logoutUser(req, res) {
+    const urlParts = url.parse(req.url, true);
+    const params = urlParts.query;
+    const { token, userId } = params;
+
+    const error = new ErrorController();
+    const response = new ResponseController();
+
+    if (token && userId) {
+      models.UsersTokens.destroy({
+        where: { token, user_id: userId }
+      }).then((deletedToken) => {
+        if (deletedToken) {
+          return response.returnSuccessResponse(res, deletedToken);
+        } else {
+          return error.return404Error(res, { token: token, userId, deleted: false });
+        }
+      });
+    } else {
+      return error.returnErrorMissedParams(res, params);
+    }
+  }
+
   generateToken(login, password) {
     return crypto.createHmac('sha256', login + password + (new Date()))
       .digest('hex');

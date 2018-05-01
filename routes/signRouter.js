@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const models = require('../models');
 const controllers = require('../controllers');
 const signRouter = express.Router();
 const { SignController } = controllers;
@@ -16,11 +15,9 @@ signRouter.route('/')
     const sign = new SignController();
     sign.registerUser(req, res);
   })
-  .put((req, res) => {
-    // @TODO
-  })
-  .delete((req, res, next) => {
-    // @TODO
+  .delete((req, res) => {
+    const sign = new SignController();
+    sign.logoutUser(req, res);
   });
 
 

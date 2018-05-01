@@ -31,6 +31,20 @@ class ErrorController {
     res.json(error);
     res.end();
   }
+
+  return404Error(res, data) {
+    const error = {
+      meta: {
+        code: 404,
+        message: 'RECORDS NOT FOUND'
+      },
+      data
+    };
+    res.statusCode = 404;
+    res.setHeader('Content-type', 'application/json');
+    res.json(error);
+    res.end();
+  }
 }
 
 module.exports = ErrorController;
