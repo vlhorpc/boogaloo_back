@@ -14,5 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users_tokens'
   });
 
+  UsersTokens.associate = (models) => {
+    models.UsersTokens.belongsTo(models.Users, {
+      foreignKey: 'user_id',
+      sourceKey: 'id',
+      as: 'user'
+    });
+  };
+
   return UsersTokens;
 };

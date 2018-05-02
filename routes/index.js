@@ -4,17 +4,16 @@ const indexRouter = require('./indexRouter');
 const userRouter = require('./userRouter');
 const signRouter = require('./signRouter');
 
-const authValidation = require('../authValidation');
+const aclValidation = require('../aclValidation');
 
 // const notFoundRouter = require('./notFoundRouter');
 
 const routesList = (app, sequelize) => {
-  app.use('/sign', signRouter);
+  app.use('/sign', aclValidation, signRouter);
   app.use('/users', userRouter);
-  app.use(authValidation);
-  app.use('/dishes', dishRouter);
-  app.use('/promotions', promoRouter);
-  app.use('/', indexRouter);
+  app.use('/dishes', aclValidation, dishRouter);
+  app.use('/promotions', aclValidation, promoRouter);
+  app.use('/', aclValidation, indexRouter);
 
 
   // 404 catch

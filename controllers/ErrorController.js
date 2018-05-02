@@ -45,6 +45,32 @@ class ErrorController {
     res.json(error);
     res.end();
   }
+
+  returnUnauthorized(res) {
+    const error = {
+      meta: {
+        code: 401,
+        message: 'UNAUTHORIZED'
+      }
+    };
+    res.statusCode = 401;
+    res.setHeader('Content-type', 'application/json');
+    res.json(error);
+    res.end();
+  }
+
+  return403Forbidden(res) {
+    const error = {
+      meta: {
+        code: 403,
+        message: 'ACCESS DENIED'
+      }
+    };
+    res.statusCode = 403;
+    res.setHeader('Content-type', 'application/json');
+    res.json(error);
+    res.end();
+  }
 }
 
 module.exports = ErrorController;
