@@ -2,5 +2,6 @@ module.exports = {
   database: 'boogaloo',
   username: 'root',
   password: 'root',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: false
 };

@@ -1,9 +1,9 @@
 const url = require('url');
-const models = require('./models');
-const acl = require('./config/acl');
-const ErrorController = require('./controllers/ErrorController');
+const models = require('../models');
+const acl = require('../config/acl');
+const ErrorController = require('../controllers/ErrorController');
 
-const aclValidation = (req, res, next) => {
+const aclMiddleware = (req, res, next) => {
   const parsedUrl = url.parse(req.originalUrl, true);
   const currentResource = (parsedUrl.pathname).substr(1);
   const urlParams = parsedUrl.query;
@@ -38,4 +38,4 @@ const aclValidation = (req, res, next) => {
   });
 };
 
-module.exports = aclValidation;
+module.exports = aclMiddleware;

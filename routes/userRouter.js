@@ -7,14 +7,12 @@ const userRouter = express.Router();
 userRouter.use(bodyParser.json());
 
 userRouter.route('/')
-  .get((req, res, next) => {
+  .get((req, res) => {
     models.Users.findAll({
-      include: [models.Tasks]
+      include: [models.Tasks],
+      attributes: ['id', 'name', 'surname']
     }).then((users) => {
       res.json(users);
-    }).catch(() => {
-      res.statusCode = 404;
-      res.end('<h1>NO RECORD</h1>');
     });
   })
   .post((req, res, next) => {
