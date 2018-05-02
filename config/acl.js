@@ -17,6 +17,13 @@ const acl = [
       { resource: 'dishes', methods: ['GET'] },
       { resource: '/', methods: ['*'] }
     ]
+  },
+  {
+    type: 3,
+    role: 'guest',
+    allows: [
+      { resource: 'sign', methods: ['*'] }
+    ]
   }
 ];
 
