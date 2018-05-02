@@ -28,18 +28,14 @@ const aclValidation = (req, res, next) => {
             const methodsList = currentResourceAllow.methods;
             if (methodsList.includes('*') || methodsList.includes(req.method)) {
               return next();
-            } else {
-              return error.return403Forbidden(res);
             }
-          } else {
             return error.return403Forbidden(res);
           }
-        } else {
-          return error.returnUnauthorized(res);
+          return error.return403Forbidden(res);
         }
-      } else {
         return error.returnUnauthorized(res);
       }
+      return error.returnUnauthorized(res);
     });
   } else {
     return error.returnUnauthorized(res);
