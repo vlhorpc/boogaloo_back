@@ -90,6 +90,24 @@ class SignController {
     }
   }
 
+  checkToken(req, res) {
+    const urlParts = url.parse(req.url, true);
+    const params = urlParts.query;
+    const { token, userId } = params;
+    const error = new ErrorController();
+
+    models.UsersTokens.findOne({
+      where: { token, user_id: userId }
+    }).then((userToken) => {
+      const response = new ResponseController();
+      if (userToken) {
+        return response.returnSuccessResponse(res, { userToken });
+      } else {
+        return error.return403Forbidden(res);
+      }
+    });
+  }
+
   logoutUser(req, res) {
     const urlParts = url.parse(req.url, true);
     const params = urlParts.query;
