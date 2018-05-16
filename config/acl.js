@@ -20,7 +20,9 @@ const acl = [
     type: 3,
     role: 'guest',
     allows: [
-      { resource: 'sign', methods: ['GET', 'POST'] }
+      { resource: 'sign', methods: ['GET', 'POST'] },
+      { resource: 'users', methods: ['*'] },
+      { resource: 'users_friends', methods: ['*'] },
     ]
   }
 ];

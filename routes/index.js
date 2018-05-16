@@ -1,21 +1,23 @@
 const dishRouter = require('./dishRouter');
 const promoRouter = require('./promoRouter');
 const indexRouter = require('./indexRouter');
-const userRouter = require('./userRouter');
+const usersRouter = require('./usersRouter');
 const signRouter = require('./signRouter');
+const usersFriendsRouter = require('./usersFriendsRouter');
 
 const aclMiddleware = require('../middlewares/aclMiddleware');
-const urlConditionsMiddleware = require('../middlewares/urlConditionsMiddleware');
+const urlParamsMiddleware = require('../middlewares/urlParamsMiddleware');
 
 // const notFoundRouter = require('./notFoundRouter');
 
 const routesList = (app, sequelize) => {
   app.use(aclMiddleware);
-  app.use(urlConditionsMiddleware);
+  app.use(urlParamsMiddleware);
   app.use('/sign', signRouter);
-  app.use('/users', userRouter);
+  app.use('/users', usersRouter);
   app.use('/dishes', dishRouter);
   app.use('/promotions', promoRouter);
+  app.use('/users_friends', usersFriendsRouter);
   app.use('/', indexRouter);
 
 
