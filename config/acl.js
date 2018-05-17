@@ -22,7 +22,7 @@ const acl = [
     allows: [
       { resource: 'sign', methods: ['GET', 'POST'] },
       { resource: 'users', methods: ['*'] },
-      { resource: 'users_friends', methods: ['*'] },
+      { resource: 'users_friends', methods: ['*'] }
     ]
   }
 ];

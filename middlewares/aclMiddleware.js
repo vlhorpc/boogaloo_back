@@ -24,9 +24,9 @@ const aclMiddleware = (req, res, next) => {
       }
     }
 
-    const currentGroupAcl = acl.find((item) => item.type === group_id);
+    const currentGroupAcl = acl.find(item => item.type === group_id);
     const currentResourceAllow = currentGroupAcl.allows
-      .find((item) => item.resource === currentResource);
+      .find(item => item.resource === currentResource);
 
     if (currentResourceAllow) {
       const methodsList = currentResourceAllow.methods;

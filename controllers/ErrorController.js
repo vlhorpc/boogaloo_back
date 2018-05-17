@@ -4,7 +4,9 @@ class ErrorController {
   constructor() {}
 
   returnError(params) {
-    const { res, errorCode, message, data, customHeader } = params;
+    const {
+      res, errorCode, message, data, customHeader
+    } = params;
     const error = {
       meta: {
         code: errorCode,

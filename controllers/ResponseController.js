@@ -4,10 +4,12 @@ class ResponseController {
   constructor() {}
 
   returnResponse(params) {
-    const { res, code, message, data } = params;
+    const {
+      res, code, message, data
+    } = params;
     const response = {
       meta: {
-        code: code,
+        code,
         message
       },
       data

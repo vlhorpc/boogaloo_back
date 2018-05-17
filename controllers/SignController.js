@@ -18,7 +18,7 @@ class SignController {
         .digest('hex');
 
       models.Users.findOne({
-        where: { login: login, password: hashedPassword }
+        where: { login, password: hashedPassword }
       }).then((user) => {
         if (user) {
           const customError = {
@@ -28,13 +28,12 @@ class SignController {
             data: []
           };
           return error.returnError(customError);
-        } else {
-          bodyParams.password = hashedPassword
-          models.Users.create(bodyParams).then((createdUser) => {
-            const response = new ResponseController();
-            return response.returnSuccessResponse(res, createdUser);
-          });
         }
+        bodyParams.password = hashedPassword;
+        models.Users.create(bodyParams).then((createdUser) => {
+          const response = new ResponseController();
+          return response.returnSuccessResponse(res, createdUser);
+        });
       });
     } else {
       return error.returnErrorMissedParams(res, bodyParams);
@@ -52,7 +51,7 @@ class SignController {
         .digest('hex');
 
       models.Users.findOne({
-        where: { login: login, password: hashedPassword }
+        where: { login, password: hashedPassword }
       }).then((user) => {
         if (user) {
           models.UsersTokens.findOne({
@@ -62,20 +61,16 @@ class SignController {
             if (userToken) {
               userToken.token = this.generateToken(login, password);
               userToken.expire_date = this.returnExpireDate();
-              userToken.save().then((savedToken) => {
-                return response.returnSuccessResponse(res, { user, token: savedToken });
-              });
+              userToken.save().then(savedToken => response.returnSuccessResponse(res, { user, token: savedToken }));
             } else {
               const newwUserToken = {
                 user_id: user.id,
                 token: this.generateToken(login, password),
                 expire_date: this.returnExpireDate()
               };
-              models.UsersTokens.create(newwUserToken).then((token) => {
-                return response.returnSuccessResponse(res, { user, token });
-              });
+              models.UsersTokens.create(newwUserToken).then(token => response.returnSuccessResponse(res, { user, token }));
             }
-          })
+          });
         } else {
           const customError = {
             res,
@@ -102,9 +97,8 @@ class SignController {
       const response = new ResponseController();
       if (userToken) {
         return response.returnSuccessResponse(res, { userToken });
-      } else {
-        return error.return403Forbidden(res);
       }
+      return error.return403Forbidden(res);
     });
   }
 
@@ -122,9 +116,8 @@ class SignController {
       }).then((deletedToken) => {
         if (deletedToken) {
           return response.returnSuccessResponse(res, deletedToken);
-        } else {
-          return error.return404Error(res, { token: token, userId, deleted: false });
         }
+        return error.return404Error(res, { token, userId, deleted: false });
       });
     } else {
       return error.returnErrorMissedParams(res, params);
