@@ -1,0 +1,79 @@
+0) Deleting index (if need):
+curl -X DELETE localhost:9200/boogaloo_users/
+
+1) Creating settings:
+curl -H 'Content-Type: application/json' -X PUT -d '
+{
+	"settings": {
+		"analysis": {
+			"filter": {
+				"ngram_filter": {
+					"type": "ngram",
+					"min_gram": 4,
+					"max_gram": 6
+				}
+			},
+			"analyzer": {
+				"ngram_analyzer": {
+					"type": "custom",
+					"tokenizer": "standard",
+					"filter": ["lowercase", "ngram_filter"]
+				}
+			}
+		}
+	},
+	"mappings": {
+		"users": {}
+	}
+}
+' localhost:9200/boogaloo_users
+
+2) Editing mapping:
+curl -H 'Content-Type: application/json' -X PUT -d '
+{
+	"users": {
+		"properties": {
+			"name": {
+				"type": "text",
+				"fields": {
+					"keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					}
+				},
+				"analyzer": "ngram_analyzer"
+			},
+			"surname": {
+				"type": "text",
+				"fields": {
+					"keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					}
+				},
+				"analyzer": "ngram_analyzer"
+			},
+			"email": {
+				"type": "text",
+				"fields": {
+					"keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					}
+				},
+				"analyzer": "ngram_analyzer"
+			},
+			"login": {
+				"type": "text",
+				"fields": {
+					"keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					}
+				},
+				"analyzer": "ngram_analyzer"
+			}
+		}
+	}
+}
+' localhost:9200/boogaloo_users/users/_mappings

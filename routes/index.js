@@ -4,6 +4,7 @@ const indexRouter = require('./indexRouter');
 const usersRouter = require('./usersRouter');
 const signRouter = require('./signRouter');
 const usersFriendsRouter = require('./usersFriendsRouter');
+const searchRouter = require('./searchRouter');
 
 const aclMiddleware = require('../middlewares/aclMiddleware');
 const urlParamsMiddleware = require('../middlewares/urlParamsMiddleware');
@@ -18,6 +19,7 @@ const routesList = (app, sequelize) => {
   app.use('/dishes', dishRouter);
   app.use('/promotions', promoRouter);
   app.use('/users_friends', usersFriendsRouter);
+  app.use('/search', searchRouter);
   app.use('/', indexRouter);
 
 
