@@ -4,20 +4,14 @@ const models = require('../models');
 
 const usersFriendsRouter = express.Router();
 
+const controllers = require('../controllers');
+
+const { UsersFriendsController } = controllers;
+
 usersFriendsRouter.use(bodyParser.json());
 
 usersFriendsRouter.route('/')
-  .get((req, res) => {
-    const { userId } = req.urlParams;
-
-    models.UsersFriends.findAndCountAll({
-      where: {
-        user_id: userId
-      }
-    }).then((response) => {
-      res.json(response);
-    });
-  });
+  .get((req, res) => (new UsersFriendsController(req, res)).getAction());
 
 
 module.exports = usersFriendsRouter;
