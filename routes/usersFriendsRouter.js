@@ -1,12 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const models = require('../models');
+const { UsersFriendsController } = require('../controllers');
 
 const usersFriendsRouter = express.Router();
-
-const controllers = require('../controllers');
-
-const { UsersFriendsController } = controllers;
 
 usersFriendsRouter.use(bodyParser.json());
 

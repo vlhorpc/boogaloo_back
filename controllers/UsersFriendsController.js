@@ -1,7 +1,7 @@
 const models = require('../models');
 const Controller = require('./Controller');
 
-class UsersFriendsController extends Controller{
+class UsersFriendsController extends Controller {
   constructor(req, res) {
     super();
     this.req = req;

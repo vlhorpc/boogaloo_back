@@ -7,11 +7,11 @@ class Controller {
     this.code = 200;
     this.response = null;
     this.message = null;
-    this.error = null;
+    this.total = null;
   }
 
   returnInformation() {
-    const { req, res, code, response, message } = this;
+    const { req, res, code, response, message, total } = this;
     const { limit, offset } = req.urlParams;
 
     const resposneParams = {
@@ -21,7 +21,8 @@ class Controller {
       response,
       message,
       limit,
-      offset
+      offset,
+      total
     };
 
     const responseObject = new Response(resposneParams);
