@@ -11,14 +11,24 @@ curl -H 'Content-Type: application/json' -X PUT -d '
 					"type": "ngram",
 					"min_gram": 4,
 					"max_gram": 6
-				}
+				},
+				"short_ngram_filter": {
+                    "type": "ngram",
+                    "min_gram": 1,
+                    "max_gram": 2
+                }
 			},
 			"analyzer": {
 				"ngram_analyzer": {
 					"type": "custom",
 					"tokenizer": "standard",
 					"filter": ["lowercase", "ngram_filter"]
-				}
+				},
+				"short_ngram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "standard",
+                    "filter": ["lowercase", "short_ngram_filter"]
+                }
 			}
 		}
 	},
@@ -43,6 +53,25 @@ curl -H 'Content-Type: application/json' -X PUT -d '
 				},
 				"analyzer": "ngram_analyzer"
 			},
+			"ngram_name": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                },
+                "analyzer": "short_ngram_analyzer"
+            },
+            "absolute_name": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
 			"surname": {
 				"type": "text",
 				"fields": {
@@ -53,6 +82,25 @@ curl -H 'Content-Type: application/json' -X PUT -d '
 				},
 				"analyzer": "ngram_analyzer"
 			},
+			"ngram_surname": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                },
+                "analyzer": "short_ngram_analyzer"
+            },
+            "absolute_surname": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
 			"email": {
 				"type": "text",
 				"fields": {
@@ -72,7 +120,26 @@ curl -H 'Content-Type: application/json' -X PUT -d '
 					}
 				},
 				"analyzer": "ngram_analyzer"
-			}
+			},
+			"ngram_login": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                },
+                "analyzer": "short_ngram_analyzer"
+            },
+            "absolute_login": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            }
 		}
 	}
 }

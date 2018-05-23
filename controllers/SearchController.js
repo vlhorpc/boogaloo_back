@@ -20,7 +20,14 @@ class SearchController extends Controller {
           multi_match: {
             type: 'best_fields',
             query: query,
-            fields: ['name', 'surname']
+            fields: [
+              'ngram_name',
+              'name^2',
+              'absolute_name^3',
+              'ngram_surname',
+              'surname^2',
+              'absolute_surname^3'
+            ]
           }
         }
       }

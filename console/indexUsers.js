@@ -19,10 +19,22 @@ models.Users.findAll().then((users) => {
   const promises = [];
 
   users.map((user) => {
+    const resultUser = user.dataValues;
+
+    resultUser.ngram_name = user.name;
+    resultUser.absolute_name = user.name;
+
+    resultUser.ngram_surname = user.surname;
+    resultUser.absolute_surname = user.surname;
+
+    resultUser.ngram_login = user.login;
+    resultUser.absolute_login = user.login;
+
     promises.push(client.index({
       index: 'boogaloo_users',
       type: 'users',
-      body: user
+      id: resultUser.id,
+      body: resultUser
     }));
   });
 
