@@ -9,10 +9,9 @@ class UsersController extends Controller {
   }
 
   getAction() {
-    const { limit, offset } = this.req.urlParams;
-
+    const { limit, offset, relations } = this.req.urlParams;
     models.Users.findAndCountAll({
-      include: [models.Tasks, models.UsersFriends],
+      include: relations,
       offset: Number(offset) || 0,
       limit: Number(limit) || 10
     }).then((users) => {

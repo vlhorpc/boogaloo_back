@@ -36,14 +36,26 @@ module.exports = (sequelize, DataTypes) => {
       models.UsersFriends,
       {
         foreignKey: 'user_id',
-        sourceKey: 'id'
+        sourceKey: 'id',
+        as: 'friends'
       }
     );
-    models.Users.hasOne(models.UsersTokens, {
-      foreignKey: 'user_id',
-      sourceKey: 'id',
-      as: 'token'
-    });
+    models.Users.hasMany(
+      models.UsersImages,
+      {
+        foreignKey: 'user_id',
+        sourceKey: 'id',
+        as: 'images'
+      }
+    );
+    models.Users.hasOne(
+      models.UsersTokens,
+      {
+        foreignKey: 'user_id',
+        sourceKey: 'id',
+        as: 'token'
+      }
+    );
   };
 
   return Users;
