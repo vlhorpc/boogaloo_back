@@ -4,6 +4,15 @@ const crypto = require('crypto');
 
 const models = require('../models');
 
+const createUserAvatarImage = (faker, userId) => {
+  const avatarData = {};
+  avatarData.absolute_href = faker.image.avatar();
+  avatarData.user_id = userId;
+  avatarData.image_type = 'avatar';
+
+  return models.UsersImages.create(avatarData);
+};
+
 const createNewUser = (faker) => {
   const newUserData = faker.helpers.userCard();
   const userName = newUserData.name;
@@ -12,7 +21,11 @@ const createNewUser = (faker) => {
   newUserData.login = newUserData.username;
   newUserData.password = crypto.createHmac('sha256', newUserData.phone).digest('hex');
 
-  return models.Users.create(newUserData).then(() => {});
+  return models.Users.create(newUserData).then((createdUser) => {
+    if (createdUser && createdUser.id) {
+      return createUserAvatarImage(faker, createdUser.id);
+    }
+  });
 };
 
 const createUsers = (usersNumber) => {
