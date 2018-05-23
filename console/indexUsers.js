@@ -30,11 +30,18 @@ models.Users.findAll().then((users) => {
     resultUser.ngram_login = user.login;
     resultUser.absolute_login = user.login;
 
-    promises.push(client.index({
+    promises.push(client.update({
       index: 'boogaloo_users',
       type: 'users',
       id: resultUser.id,
       body: resultUser
+    }).catch(() => {
+      client.index({
+        index: 'boogaloo_users',
+        type: 'users',
+        id: resultUser.id,
+        body: resultUser
+      }).catch(() => {});
     }));
   });
 
