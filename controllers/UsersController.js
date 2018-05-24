@@ -1,9 +1,4 @@
 const models = require('../models');
-const op = models.Sequelize.Op;
-const operatorsAliases = {
-  $eq: op.eq,
-  $or: op.or
-};
 
 const Controller = require('./Controller');
 

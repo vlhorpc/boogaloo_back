@@ -1,27 +1,23 @@
 const url = require('url');
-const models = require('../models');
-const op = models.Sequelize.Op;
 
 const sequelizeOperations = [
-  {
-    text: '=',
-    operation: '$eq'
-  },
-  {
-    text: '>',
-    operation: '$eq'
-  },
-  {
-    text: 'IN',
-    operation: '$eq'
-  }
+  { text: '=', operation: '$eq' },
+  { text: '!=', operation: '$ne' },
+  { text: '>', operation: '$gt' },
+  { text: '>=', operation: '$gte' },
+  { text: '<', operation: '$lt' },
+  { text: '<=', operation: '$lte' },
+  { text: 'IN', operation: '$in' },
+  { text: 'NOT IN', operation: '$notIn' }
 ];
+
+const arrayOperations = ['IN', 'NOT IN'];
 
 const createOperation = (operationString, operationsArray) => {
   const parts = operationString.split('*');
   const operation = sequelizeOperations.find(oper => oper.text === parts[1]);
   operationsArray[parts[0]] = {
-    [operation.operation]: parts[2]
+    [operation.operation]: arrayOperations.includes(operation.text) ? [parts[2].split(',')] : parts[2]
   };
   return operationsArray;
 };
