@@ -1,11 +1,27 @@
 const url = require('url');
+const models = require('../models');
+const op = models.Sequelize.Op;
+
+const sequelizeOperations = [
+  {
+    text: '=',
+    operation: '$eq'
+  },
+  {
+    text: '>',
+    operation: '$eq'
+  },
+  {
+    text: 'IN',
+    operation: '$eq'
+  }
+];
 
 const createOperation = (operationString, operationsArray) => {
-  // console.log('operationString', operationString);
-  const parts = operationString.split('=');
-  // console.log('parts', parts);
+  const parts = operationString.split('*');
+  const operation = sequelizeOperations.find(oper => oper.text === parts[1]);
   operationsArray[parts[0]] = {
-    ['gt']: parts[1]
+    [operation.operation]: parts[2]
   };
   return operationsArray;
 };
@@ -16,17 +32,17 @@ const createWhereObject = (whereString, whereObject, fullObject) => {
   const matches = wherePattern.exec(whereString);
 
   if (matches && matches.length) {
-    const operatorType = [whereString[0] === '[' ? 'or' : 'and'];
+    const operatorType = [whereString[0] === '[' ? '$or' : '$and'];
     whereObject[operatorType] = {};
 
-    whereObject[whereString[0] === '[' ? 'or' : 'and'] = [
+    whereObject[whereString[0] === '[' ? '$or' : '$and'] = [
       createWhereObject(matches[1], whereObject[operatorType], fullObject),
       createWhereObject(matches[2], whereObject[operatorType], fullObject)
     ];
     return whereObject;
   } else {
     let operationsObject = {};
-    const stringParts = whereString.slice(1, -1).split(',');
+    const stringParts = whereString.slice(1, -1).split(';');
     stringParts.forEach(part => operationsObject = createOperation(part, operationsObject));
     return operationsObject;
   }
@@ -35,15 +51,15 @@ const createWhereObject = (whereString, whereObject, fullObject) => {
 const urlConditionsMiddleware = (req, res, next) => {
   const urlParts = url.parse(req.url, true);
   const urlParams = urlParts.query;
+
   let where = {};
-  // REGULAR ===> (some values)(some sign)(another value)
 
+  req.urlParams.where = [];
+  if (urlParams.where && urlParams.where.length) {
+    req.urlParams.where = createWhereObject(urlParams.where, where, where);
+  }
 
-  createWhereObject(urlParams.where, where, where);
-
-  res.json(where);
-
-  // next();
+  next();
 };
 
 module.exports = urlConditionsMiddleware;

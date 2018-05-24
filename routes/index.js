@@ -14,8 +14,8 @@ const urlConditionsMiddleware = require('../middlewares/urlConditionsMiddleware'
 
 const routesList = (app, sequelize) => {
   app.use(aclMiddleware);
-  app.use(urlConditionsMiddleware);
   app.use(urlParamsMiddleware);
+  app.use(urlConditionsMiddleware);
   app.use('/sign', signRouter);
   app.use('/users', usersRouter);
   app.use('/dishes', dishRouter);
