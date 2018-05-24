@@ -6,6 +6,7 @@ API for boogaloo.
 ## Requirements
 * node `^6.8.1`
 * npm `^3.10.8`
+* elasticsearch `6.2.4`
 
 ## Getting Started
 
@@ -20,7 +21,7 @@ $ npm run dev                   # Run in development mode
 
 ## API usage
 
-####Using relations 
+#### Using relations 
 ```$xslt
 /{controllerName}?relations={a,b,c}        # a,b,c - relations name
 ```
