@@ -46,6 +46,21 @@ In order to use the filtering, you must specify the ```where``` parameter.
 // (id=10 AND name=Jeffry) OR (id=14)
 ```
 
+##### Supported Operations
+Supported list of such comparative operations for filtering data:
+
+| Operation  | Usage |
+| ------------- | ------------- |
+| =  | (id*=*1)  |
+| !=  | (id*!=*1)  |
+| \>  | (id*\>*1)  |
+| >=  | (id*\>=*1)  |
+| <  | (id*<*1)  |
+| <=  | (id*<=*1)  |
+| IN  | (id\*IN\*1,2,3)  |
+| NOT IN  | (id\*NOT IN\*1,2,3)  |
+| LIKE  | (email\*LIKE\*%test%)  |
+
 
 
 

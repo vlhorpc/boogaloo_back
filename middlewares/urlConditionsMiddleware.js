@@ -8,7 +8,8 @@ const sequelizeOperations = [
   { text: '<', operation: '$lt' },
   { text: '<=', operation: '$lte' },
   { text: 'IN', operation: '$in' },
-  { text: 'NOT IN', operation: '$notIn' }
+  { text: 'NOT IN', operation: '$notIn' },
+  { text: 'LIKE', operation: '$like' }
 ];
 
 const arrayOperations = ['IN', 'NOT IN'];
