@@ -1,7 +1,6 @@
-0) Deleting index (if need):
+
 curl -X DELETE localhost:9200/boogaloo_users/
 
-1) Creating settings:
 curl -H 'Content-Type: application/json' -X PUT -d '
 {
 	"settings": {
@@ -38,7 +37,6 @@ curl -H 'Content-Type: application/json' -X PUT -d '
 }
 ' localhost:9200/boogaloo_users
 
-2) Editing mapping:
 curl -H 'Content-Type: application/json' -X PUT -d '
 {
 	"users": {

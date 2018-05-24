@@ -9,12 +9,14 @@ class UsersFriendsController extends Controller {
   }
 
   getAction() {
-    const { userId } = this.req.urlParams;
+    const { userId, limit = 10, offset = 0 } = this.req.urlParams;
 
     models.UsersFriends.findAndCountAll({
       where: {
         user_id: userId
-      }
+      },
+      limit: Number(limit),
+      offset: Number(offset)
     }).then((response) => {
       if (!response.count) {
         this.code = 404;

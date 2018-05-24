@@ -8,11 +8,13 @@ const searchRouter = require('./searchRouter');
 
 const aclMiddleware = require('../middlewares/aclMiddleware');
 const urlParamsMiddleware = require('../middlewares/urlParamsMiddleware');
+const urlConditionsMiddleware = require('../middlewares/urlConditionsMiddleware');
 
 // const notFoundRouter = require('./notFoundRouter');
 
 const routesList = (app, sequelize) => {
   app.use(aclMiddleware);
+  app.use(urlConditionsMiddleware);
   app.use(urlParamsMiddleware);
   app.use('/sign', signRouter);
   app.use('/users', usersRouter);
