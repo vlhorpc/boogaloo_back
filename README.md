@@ -26,7 +26,7 @@ $ npm run dev                   # Run in development mode
 /{controllerName}?relations={a,b,c}        # a,b,c - relations name
 ```
 
-####Filtering requests
+#### Filtering requests
 In order to use the filtering, you must specify the ```where``` parameter.
 ```AND``` and ```OR``` parametrs are using different types of brackets.<br />Examples of usage:
 1. ```OR``` parameter
