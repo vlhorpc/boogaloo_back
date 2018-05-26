@@ -41,5 +41,15 @@ const createUsers = (usersNumber) => {
   });
 };
 
-createUsers(2);
+class createFakeUsers {
+  constructor() {
+    this.command = 'cff <usersNumber>';
+    this.description = 'Create fake users (for test)';
+  }
 
+  run(usersNumber) {
+    createUsers(usersNumber);
+  }
+}
+
+module.exports = createFakeUsers;

@@ -10,7 +10,7 @@ const addFriends = (userEmail, friendsNumber) => {
     }
   }).then((currentUser) => {
     return models.Users.findAll({
-      limit: friendsNumber
+      limit: Number(friendsNumber)
     }).then((users) => {
 
       const promises = [];
@@ -27,11 +27,22 @@ const addFriends = (userEmail, friendsNumber) => {
 
       return Promise.all(promises).then(() => closeConnection());
     }).then(() => closeConnection());
-  }).catch(() => {
+  }).catch((err) => {
+    console.log('err', err);
     console.log(chalk.red(`User with email ${chalk.blue(userEmail)} does not exist!`));
     closeConnection();
   });
 };
 
-addFriends('volodia2506@gmail.com1', 200);
+class addFakeFriends {
+  constructor() {
+    this.command = 'aff <userEmail> <friendsNumber>';
+    this.description = 'Add fake friends';
+  }
 
+  run(userEmail = 'volodia2506@gmail.com', friendsNumber = 10) {
+    addFriends(userEmail, friendsNumber);
+  }
+}
+
+module.exports = addFakeFriends;
