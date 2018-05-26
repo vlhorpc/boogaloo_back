@@ -13,7 +13,7 @@ const createUserAvatarImage = (faker, userId) => {
   return models.UsersImages.create(avatarData);
 };
 
-const createNewUser = (faker) => {
+const createNewUser = () => {
   const newUserData = faker.helpers.userCard();
   const userName = newUserData.name;
   newUserData.name = (userName).substr(0, userName.indexOf(' '));
@@ -25,30 +25,28 @@ const createNewUser = (faker) => {
     if (createdUser && createdUser.id) {
       return createUserAvatarImage(faker, createdUser.id);
     }
-  });
-};
-
-const createUsers = (usersNumber) => {
-  let promises = [];
-
-  for (let i = 0; i < usersNumber; i++) {
-    promises.push(createNewUser(faker).then(() => console.log(chalk.green(' ✔ new user created!'))));
-  }
-
-  return Promise.all(promises).then(() => {
-    console.log(chalk.red(`\nTotal: ${usersNumber} added!`));
-    models.sequelize.close();
-  });
+  }).catch((err) => console.log('err', err));
 };
 
 class createFakeUsers {
   constructor() {
-    this.command = 'cff <usersNumber>';
+    this.command = 'cfu <usersNumber>';
     this.description = 'Create fake users (for test)';
   }
 
   run(usersNumber) {
-    createUsers(usersNumber);
+    let promises = [];
+
+    for (let i = 0; i < usersNumber; i++) {
+      promises.push(createNewUser().then(() => {
+        console.log(chalk.green(' ✔ new user created!'));
+      }));
+    }
+
+    return Promise.all(promises).then(() => {
+      console.log(chalk.red(`\nTotal: ${usersNumber} added!`));
+      models.sequelize.close();
+    });
   }
 }
 
