@@ -1,4 +1,4 @@
-const Response = require('./Response');
+const Response = require('../libs/Response');
 
 class Controller {
   constructor() {

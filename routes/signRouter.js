@@ -14,7 +14,7 @@ signRouter.route('/')
     const params = urlParts.query;
     const { token, userId } = params;
 
-    const sign = new SignController();
+    const sign = new SignController(req, res);
 
     if (token && userId) {
       sign.checkToken(req, res);
@@ -23,11 +23,11 @@ signRouter.route('/')
     }
   })
   .post((req, res) => {
-    const sign = new SignController();
+    const sign = new SignController(req, res);
     sign.registerUser(req, res);
   })
   .delete((req, res) => {
-    const sign = new SignController();
+    const sign = new SignController(req, res);
     sign.logoutUser(req, res);
   });
 

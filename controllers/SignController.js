@@ -1,17 +1,20 @@
 const models = require('../models');
-const ErrorController = require('./ErrorController');
-const ResponseController = require('./ResponseController');
 const crypto = require('crypto');
 const url = require('url');
 const moment = require('moment');
+const Controller = require('./Controller');
 
-class SignController {
-  constructor() {}
+class SignController extends Controller {
+  constructor(req, res) {
+    super();
+    this.req = req;
+    this.res = res;
+  }
 
-  registerUser(req, res) {
+  registerUser() {
+    const { req } = this;
     const bodyParams = req.body;
     const { login, password } = bodyParams;
-    const error = new ErrorController();
 
     if (login && password) {
       const hashedPassword = crypto.createHmac('sha256', password)
@@ -21,30 +24,27 @@ class SignController {
         where: { login, password: hashedPassword }
       }).then((user) => {
         if (user) {
-          const customError = {
-            res,
-            errorCode: 403,
-            message: 'USER ALREADY EXISTS',
-            data: []
-          };
-          return error.returnError(customError);
+          this.code = 403;
+          this.message = 'USER ALREADY EXISTS';
+          this.returnInformation();
         }
         bodyParams.password = hashedPassword;
         models.Users.create(bodyParams).then((createdUser) => {
-          const response = new ResponseController();
-          return response.returnSuccessResponse(res, createdUser);
+          this.response = createdUser;
+          this.returnInformation();
         });
       });
     } else {
-      return error.returnErrorMissedParams(res, bodyParams);
+      this.code = 422;
+      this.response = bodyParams;
+      this.returnInformation();
     }
   }
 
-  loginUser(req, res) {
+  loginUser(req) {
     const urlParts = url.parse(req.url, true);
     const params = urlParts.query;
     const { login, password } = params;
-    const error = new ErrorController();
 
     if (login && password) {
       const hashedPassword = crypto.createHmac('sha256', password)
@@ -57,31 +57,35 @@ class SignController {
           models.UsersTokens.findOne({
             where: { user_id: user.id }
           }).then((userToken) => {
-            const response = new ResponseController();
             if (userToken) {
               userToken.token = this.generateToken(login, password);
               userToken.expire_date = this.returnExpireDate();
-              userToken.save().then(savedToken => response.returnSuccessResponse(res, { user, token: savedToken }));
+              userToken.save().then(savedToken => {
+                this.response = { user, savedToken };
+                this.returnInformation();
+              });
             } else {
               const newwUserToken = {
                 user_id: user.id,
                 token: this.generateToken(login, password),
                 expire_date: this.returnExpireDate()
               };
-              models.UsersTokens.create(newwUserToken).then(token => response.returnSuccessResponse(res, { user, token }));
+              models.UsersTokens.create(newwUserToken).then(token => {
+                this.response = { user, token };
+                this.returnInformation();
+              });
             }
           });
         } else {
-          const customError = {
-            res,
-            errorCode: 404,
-            message: 'USER DOESN\'T EXIST'
-          };
-          return error.returnError(customError);
+          this.code = 404;
+          this.message = 'USER DOESN\'T EXIST';
+          this.returnInformation();
         }
       });
     } else {
-      return error.returnErrorMissedParams(res, params);
+      this.code = 422;
+      this.response = params;
+      this.returnInformation();
     }
   }
 
@@ -89,16 +93,17 @@ class SignController {
     const urlParts = url.parse(req.url, true);
     const params = urlParts.query;
     const { token, userId } = params;
-    const error = new ErrorController();
 
     models.UsersTokens.findOne({
       where: { token, user_id: userId }
     }).then((userToken) => {
-      const response = new ResponseController();
       if (userToken) {
-        return response.returnSuccessResponse(res, { userToken });
+        this.response = { userToken };
+        this.returnInformation();
       }
-      return error.return403Forbidden(res);
+      this.code = 403;
+      this.response = params;
+      this.returnInformation();
     });
   }
 
@@ -107,20 +112,22 @@ class SignController {
     const params = urlParts.query;
     const { token, userId } = params;
 
-    const error = new ErrorController();
-    const response = new ResponseController();
-
     if (token && userId) {
       models.UsersTokens.destroy({
         where: { token, user_id: userId }
       }).then((deletedToken) => {
         if (deletedToken) {
-          return response.returnSuccessResponse(res, deletedToken);
+          this.response = { deletedToken, deleted: true };
+          this.returnInformation();
         }
-        return error.return404Error(res, { token, userId, deleted: false });
+        this.code = 404;
+        this.response = { token, userId, deleted: false };
+        this.returnInformation();
       });
     } else {
-      return error.returnErrorMissedParams(res, params);
+      this.code = 422;
+      this.response = params;
+      this.returnInformation();
     }
   }
 
