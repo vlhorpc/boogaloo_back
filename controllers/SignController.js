@@ -11,6 +11,24 @@ class SignController extends Controller {
     this.res = res;
   }
 
+  getAction() {
+    const { token, userId } = this.req.urlParams;
+
+    if (token && userId) {
+      this.checkToken(this.req, this.res);
+    } else {
+      this.loginUser(this.req, this.res);
+    }
+  }
+
+  postAction() {
+    this.registerUser();
+  }
+
+  deleteAction() {
+    this.logoutUser();
+  }
+
   registerUser() {
     const { req } = this;
     const bodyParams = req.body;
@@ -24,8 +42,7 @@ class SignController extends Controller {
         where: { login, password: hashedPassword }
       }).then((user) => {
         if (user) {
-          this.code = 403;
-          this.message = 'USER ALREADY EXISTS';
+          this.setResponseData({ code: 403, message: 'USER ALREADY EXISTS' });
           this.returnInformation();
         }
         bodyParams.password = hashedPassword;
@@ -35,8 +52,7 @@ class SignController extends Controller {
         });
       });
     } else {
-      this.code = 422;
-      this.response = bodyParams;
+      this.setResponseData({ code: 422, response: bodyParams });
       this.returnInformation();
     }
   }
@@ -89,10 +105,8 @@ class SignController extends Controller {
     }
   }
 
-  checkToken(req, res) {
-    const urlParts = url.parse(req.url, true);
-    const params = urlParts.query;
-    const { token, userId } = params;
+  checkToken() {
+    const { token, userId } = this.req.urlParams;
 
     models.UsersTokens.findOne({
       where: { token, user_id: userId }
@@ -101,8 +115,7 @@ class SignController extends Controller {
         this.response = { userToken };
         this.returnInformation();
       }
-      this.code = 403;
-      this.response = params;
+      this.setResponseData({ code: 403, response: this.req.urlParams });
       this.returnInformation();
     });
   }

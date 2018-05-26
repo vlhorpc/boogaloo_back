@@ -10,6 +10,12 @@ class Controller {
     this.total = null;
   }
 
+  setResponseData(params) {
+    Object.keys(params).forEach((key) => {
+      this[key] = params[key];
+    });
+  }
+
   returnInformation() {
     const { req, res, code, response, message, total } = this;
     const { limit, offset } = req.urlParams;

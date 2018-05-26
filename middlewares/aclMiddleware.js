@@ -1,13 +1,13 @@
 const url = require('url');
 const models = require('../models');
 const acl = require('../config/acl');
-const ErrorController = require('../controllers/ErrorController');
+const Response = require('../libs/Response');
 
 const aclMiddleware = (req, res, next) => {
   const parsedUrl = url.parse(req.originalUrl, true);
   const currentResource = (parsedUrl.pathname).substr(1);
   const urlParams = parsedUrl.query;
-  const error = new ErrorController();
+  const response = new Response(req, res);
 
   const { token } = urlParams;
 
@@ -34,7 +34,9 @@ const aclMiddleware = (req, res, next) => {
         return next();
       }
     }
-    return error.return403Forbidden(res);
+
+    response.setResponseData({ code: 403 });
+    return response.returnResponse();
   });
 };
 

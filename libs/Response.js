@@ -11,6 +11,12 @@ class Response {
     this.offset = Number(offset);
   }
 
+  setResponseData(params) {
+    Object.keys(params).forEach((key) => {
+      this[key] = params[key];
+    });
+  }
+
   returnResponse() {
     const { res, code, response, message, total, limit, offset } = this;
     const responseObject = {
