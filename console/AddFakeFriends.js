@@ -3,7 +3,7 @@ const models = require('../models');
 
 const closeConnection = () => models.sequelize.close();
 
-class addFakeFriends {
+class AddFakeFriends {
   constructor() {
     this.command = 'aff <userEmail> <friendsNumber>';
     this.description = 'Add fake friends';
@@ -43,4 +43,4 @@ class addFakeFriends {
   }
 }
 
-module.exports = addFakeFriends;
+module.exports = AddFakeFriends;

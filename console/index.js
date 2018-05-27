@@ -1,6 +1,7 @@
 const program = require('commander');
 const path = require('path');
 const fs = require('fs');
+const chalk = require('chalk');
 
 const basename = path.basename(__filename);
 
@@ -26,7 +27,7 @@ class ConsoleRunner {
     this.commandsList.forEach((command) => {
       program
         .command(`${command.command}`)
-        .description(command.description)
+        .description(chalk.green(command.description))
         .action(command.run);
     });
 

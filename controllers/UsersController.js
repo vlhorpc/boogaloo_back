@@ -11,14 +11,12 @@ class UsersController extends Controller {
 
   getAction() {
     const { limit, offset, relations, where } = this.req.urlParams;
-    console.log('where', where);
     models.Users.findAndCountAll({
       include: relations,
       offset: Number(offset) || 0,
       limit: Number(limit) || 10,
       where
     }).then((users) => {
-      console.log('users', users);
       this.total = users.count;
       this.response = users.rows;
       this.code = users.count > 0 ? this.code : 404;

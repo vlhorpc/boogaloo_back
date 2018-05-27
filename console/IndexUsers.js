@@ -1,7 +1,7 @@
 const models = require('../models');
 const elasticsearch = require('elasticsearch');
 
-class indexUsers {
+class IndexUsers {
   constructor() {
     this.command = 'index_users';
     this.description = 'Index users (ElasticSearch)';
@@ -63,4 +63,4 @@ class indexUsers {
   }
 }
 
-module.exports = indexUsers;
+module.exports = IndexUsers;

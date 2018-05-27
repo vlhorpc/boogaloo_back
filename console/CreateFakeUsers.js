@@ -28,7 +28,7 @@ const createNewUser = () => {
   }).catch((err) => console.log('err', err));
 };
 
-class createFakeUsers {
+class CreateFakeUsers {
   constructor() {
     this.command = 'cfu <usersNumber>';
     this.description = 'Create fake users (for test)';
@@ -50,4 +50,4 @@ class createFakeUsers {
   }
 }
 
-module.exports = createFakeUsers;
+module.exports = CreateFakeUsers;

@@ -31,6 +31,7 @@ const aclMiddleware = (req, res, next) => {
     if (currentResourceAllow) {
       const methodsList = currentResourceAllow.methods;
       if (methodsList.includes('*') || methodsList.includes(req.method)) {
+        req.userData = userToken;
         return next();
       }
     }

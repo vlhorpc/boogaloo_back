@@ -15,7 +15,8 @@ const acl = [
     allows: [
       { resource: 'sign', methods: ['*'] },
       { resource: 'users', methods: ['GET'] },
-      { resource: 'search', methods: ['*'] }
+      { resource: 'search', methods: ['*'] },
+      { resource: 'users_friends', methods: ['*'] }
     ]
   },
   {

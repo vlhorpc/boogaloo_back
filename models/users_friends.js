@@ -17,5 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users_friends'
   });
 
+
+  UsersFriends.associate = (models) => {
+    models.UsersFriends.belongsTo(models.Users, {
+      foreignKey: 'user_id',
+      sourceKey: 'id',
+      as: 'user'
+    });
+  };
+
   return UsersFriends;
 };
