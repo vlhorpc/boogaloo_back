@@ -77,7 +77,7 @@ class SignController extends Controller {
               userToken.token = this.generateToken(login, password);
               userToken.expire_date = this.returnExpireDate();
               userToken.save().then(savedToken => {
-                this.response = { user, savedToken };
+                this.response = { user, token: savedToken };
                 this.returnInformation();
               });
             } else {

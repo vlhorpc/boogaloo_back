@@ -73,9 +73,9 @@ class SearchController extends Controller {
   }
 
   getAction() {
-    const { index, query } = this.req.urlParams;
+    const { index, query, limit, offset } = this.req.urlParams;
 
-    this.client.search(this.returnSearchObject(index, query)).then((response) => {
+    this.client.search(this.returnSearchObject(index, query, null, limit, offset)).then((response) => {
       this.response = response.hits;
       this.returnInformation();
     }).catch((err) => {
