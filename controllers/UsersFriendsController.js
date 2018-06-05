@@ -22,7 +22,8 @@ class UsersFriendsController extends Controller {
 
     models.UsersFriends.findAndCountAll({
       where: {
-        user_id: userId
+        user_id: userId,
+        accepted: 1
       },
       limit: Number(limit),
       offset: Number(offset)
@@ -36,11 +37,20 @@ class UsersFriendsController extends Controller {
     });
   }
 
+  postAction() {
+    this.addNewFriend();
+  }
+
+  delAction() {
+    this.deleteFriend();
+  }
+
   returnFriendsIdsList() {
     const { userData } = this.req;
     models.UsersFriends.findAndCountAll({
       where: {
-        user_id: userData.user_id
+        user_id: userData.user_id,
+        accepted: 1
       }
     }).then((friends) => {
       const idsList = friends && friends.rows && friends.rows.length
@@ -64,7 +74,8 @@ class UsersFriendsController extends Controller {
 
     models.UsersFriends.findAndCountAll({
       where: {
-        user_id: userData.user_id
+        user_id: userData.user_id,
+        accepted: 1
       },
       limit: Number(limit),
       offset: Number(offset)
@@ -89,6 +100,47 @@ class UsersFriendsController extends Controller {
       this.code = 404;
       this.returnInformation();
     });
+  }
+
+  addNewFriend() {
+    const { userData, urlParams } = this.req;
+
+    if (userData) {
+      models.UsersFriends.create({
+        user_id: userData.user_id,
+        friend_id: urlParams.userId,
+        accepted: 0
+      }).then(() => {
+        this.setResponseData({ response: { success: true } });
+        this.returnInformation();
+      }).catch((err) => {
+        this.res.json(err);
+      });
+    } else {
+      this.code = 403;
+      this.returnInformation();
+    }
+  }
+
+  deleteFriend() {
+    const { userData, urlParams } = this.req;
+
+    if (userData) {
+      models.UsersFriends.destroy({
+        where: {
+          user_id: userData.user_id,
+          friend_id: urlParams.friendId
+        }
+      }).then(() => {
+        this.setResponseData({ response: { success: true } });
+        this.returnInformation();
+      }).catch((err) => {
+        this.res.json(err);
+      });
+    } else {
+      this.code = 403;
+      this.returnInformation();
+    }
   }
 }
 

@@ -7,7 +7,9 @@ const usersFriendsRouter = express.Router();
 usersFriendsRouter.use(bodyParser.json());
 
 usersFriendsRouter.route('/')
-  .get((req, res) => (new UsersFriendsController(req, res)).getAction());
+  .get((req, res) => (new UsersFriendsController(req, res)).getAction())
+  .post((req, res) => (new UsersFriendsController(req, res)).postAction())
+  .delete((req, res) => (new UsersFriendsController(req, res)).delAction());
 
 
 module.exports = usersFriendsRouter;
