@@ -10,7 +10,9 @@ class UsersFriendsController extends Controller {
   }
 
   getAction() {
-    const { userId, limit = 20, offset = 0, search, token, idsOnly } = this.req.urlParams;
+    const {
+      userId, limit = 20, offset = 0, search, token, idsOnly, where, relations
+    } = this.req.urlParams;
 
     if (idsOnly) {
       return this.returnFriendsIdsList();
@@ -21,10 +23,8 @@ class UsersFriendsController extends Controller {
     }
 
     models.UsersFriends.findAndCountAll({
-      where: {
-        user_id: userId,
-        accepted: 1
-      },
+      include: relations,
+      where,
       limit: Number(limit),
       offset: Number(offset)
     }).then((response) => {
@@ -50,7 +50,6 @@ class UsersFriendsController extends Controller {
     models.UsersFriends.findAndCountAll({
       where: {
         user_id: userData.user_id,
-        accepted: 1
       }
     }).then((friends) => {
       const idsList = friends && friends.rows && friends.rows.length
@@ -75,7 +74,6 @@ class UsersFriendsController extends Controller {
     models.UsersFriends.findAndCountAll({
       where: {
         user_id: userData.user_id,
-        accepted: 1
       },
       limit: Number(limit),
       offset: Number(offset)
