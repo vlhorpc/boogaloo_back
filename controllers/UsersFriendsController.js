@@ -38,11 +38,80 @@ class UsersFriendsController extends Controller {
   }
 
   postAction() {
-    this.addNewFriend();
+    const { urlParams } = this.req;
+    if (urlParams && urlParams.submitFriend) {
+      return this.submitFriend();
+    }
+    if (urlParams && urlParams.rejectFriend) {
+      return this.rejectFriend();
+    }
+    return this.addNewFriend();
   }
 
   delAction() {
     this.deleteFriend();
+  }
+
+  submitFriend() {
+    const { userData, urlParams } = this.req;
+
+    if (!userData) {
+      this.code = 403;
+      this.returnInformation();
+    }
+
+    models.UsersFriends.findOne({
+      where: {
+        user_id: userData.user_id,
+        friend_id: urlParams.userId
+      }
+    }).then((item) => {
+      item.accepted = 1;
+      item.save()
+        .then(() => {
+          models.UsersFriends.findOne({
+            where: {
+              user_id: urlParams.userId,
+              friend_id: userData.user_id
+            }
+          }).then((initialItem) => {
+            initialItem.accepted = 1;
+            initialItem.save().then(() => {
+              this.setResponseData({ response: { updated: true } });
+              this.returnInformation();
+            });
+          });
+        });
+    });
+  }
+
+  rejectFriend() {
+    const { userData, urlParams } = this.req;
+
+    if (!userData) {
+      this.code = 403;
+      this.returnInformation();
+    }
+
+    models.UsersFriends.destroy({
+      where: {
+        user_id: userData.user_id,
+        friend_id: urlParams.userId
+      }
+    }).then(() => {
+      models.UsersFriends.findOne({
+        where: {
+          user_id: urlParams.userId,
+          friend_id: userData.user_id
+        }
+      }).then((initialItem) => {
+        initialItem.accepted = -1;
+        initialItem.save().then(() => {
+          this.setResponseData({ response: { updated: true } });
+          this.returnInformation();
+        });
+      });
+    });
   }
 
   returnFriendsIdsList() {
@@ -50,6 +119,7 @@ class UsersFriendsController extends Controller {
     models.UsersFriends.findAndCountAll({
       where: {
         user_id: userData.user_id,
+        accepted: 1
       }
     }).then((friends) => {
       const idsList = friends && friends.rows && friends.rows.length
@@ -109,8 +179,14 @@ class UsersFriendsController extends Controller {
         friend_id: urlParams.userId,
         accepted: 0
       }).then(() => {
-        this.setResponseData({ response: { success: true } });
-        this.returnInformation();
+        models.UsersFriends.create({
+          user_id: urlParams.userId,
+          friend_id: userData.user_id,
+          accepted: 2
+        }).then(() => {
+          this.setResponseData({ response: { success: true } });
+          this.returnInformation();
+        });
       }).catch((err) => {
         this.res.json(err);
       });
@@ -130,8 +206,18 @@ class UsersFriendsController extends Controller {
           friend_id: urlParams.friendId
         }
       }).then(() => {
-        this.setResponseData({ response: { success: true } });
-        this.returnInformation();
+        models.UsersFriends.findOne({
+          where: {
+            user_id: urlParams.friendId,
+            friend_id: userData.user_id
+          }
+        }).then((element) => {
+          element.accepted = -1;
+          element.save().then(() => {
+            this.setResponseData({ response: { success: true } });
+            this.returnInformation();
+          });
+        });
       }).catch((err) => {
         this.res.json(err);
       });
