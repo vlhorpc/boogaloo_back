@@ -25,7 +25,7 @@ const createOperation = (operationString, operationsArray) => {
 
 
 const createWhereObject = (whereString, whereObject, fullObject) => {
-  const wherePattern = /^[[|(](\[|\(\S+\)),(\[|\(\S+\))[\]|\)]$/g;
+  const wherePattern = /^[[|(]([[|(]\S+[)|\]]),([[|(]\S+[)|\]])[\]|\)]$/g;
   const matches = wherePattern.exec(whereString);
 
   if (matches && matches.length) {
