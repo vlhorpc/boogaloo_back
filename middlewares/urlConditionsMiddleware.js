@@ -1,3 +1,4 @@
+const helpers = require('../helpers');
 const url = require('url');
 
 const sequelizeOperations = [
@@ -14,9 +15,16 @@ const sequelizeOperations = [
 
 const arrayOperations = ['IN', 'NOT IN'];
 
+let arrayOrder = [];
+
 const createOperation = (operationString, operationsArray) => {
   const parts = operationString.split('*');
   const operation = sequelizeOperations.find(oper => oper.text === parts[1]);
+
+  if (arrayOperations.includes(operation.text)) {
+    arrayOrder = parts[2].split(',');
+  }
+
   operationsArray[parts[0]] = {
     [operation.operation]: arrayOperations.includes(operation.text) ? [parts[2].split(',')] : parts[2]
   };
@@ -50,11 +58,35 @@ const urlConditionsMiddleware = (req, res, next) => {
   const urlParams = urlParts.query;
 
   let where = {};
+  let order = null;
 
   req.urlParams.where = [];
+  req.urlParams.order = {};
+
   if (urlParams.where && urlParams.where.length) {
     req.urlParams.where = createWhereObject(urlParams.where, where, where);
   }
+
+  if (urlParams.order) {
+    if (urlParams.order.includes('FIELD')) {
+      order = {
+        fieldName: urlParams.order.substring(6, urlParams.order.length - 1),
+        sortType: 'FIELD',
+        arrayOrder
+      };
+    } else {
+      const orderInformation = urlParams.order.split(' ');
+      order = {
+        fieldName: orderInformation[0],
+        sortType: orderInformation[1]
+      };
+    }
+  }
+
+  req.urlParams.order = {
+    orderData: order,
+    orderFunction: helpers.generateModelOutputOrder
+  };
 
   next();
 };
