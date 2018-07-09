@@ -53,7 +53,11 @@ class UsersFriendsController extends Controller {
   }
 
   submitFriend() {
-    const { userData, urlParams } = this.req;
+    const { userData, urlParams, socketsData } = this.req;
+    const { io } = socketsData;
+
+    const submittedUserSocket = global.participants.find((participant) =>
+      Number(participant.userId) === Number(urlParams.userId));
 
     if (!userData) {
       this.code = 403;
@@ -77,6 +81,9 @@ class UsersFriendsController extends Controller {
           }).then((initialItem) => {
             initialItem.accepted = 1;
             initialItem.save().then(() => {
+              if (submittedUserSocket && submittedUserSocket.socketId) {
+                io.sockets.connected[submittedUserSocket.socketId].emit('submitting_new_friend', userData);
+              }
               this.setResponseData({ response: { updated: true } });
               this.returnInformation();
             });
@@ -86,7 +93,11 @@ class UsersFriendsController extends Controller {
   }
 
   rejectFriend() {
-    const { userData, urlParams } = this.req;
+    const { userData, urlParams, socketsData } = this.req;
+    const { io } = socketsData;
+
+    const rejectedUserSocket = global.participants.find((participant) =>
+      Number(participant.userId) === Number(urlParams.userId));
 
     if (!userData) {
       this.code = 403;
@@ -107,6 +118,9 @@ class UsersFriendsController extends Controller {
       }).then((initialItem) => {
         initialItem.accepted = -1;
         initialItem.save().then(() => {
+          if (rejectedUserSocket && rejectedUserSocket.socketId) {
+            io.sockets.connected[rejectedUserSocket.socketId].emit('rejecting_new_friend', userData);
+          }
           this.setResponseData({ response: { updated: true } });
           this.returnInformation();
         });
@@ -171,7 +185,11 @@ class UsersFriendsController extends Controller {
   }
 
   addNewFriend() {
-    const { userData, urlParams } = this.req;
+    const { userData, urlParams, socketsData } = this.req;
+    const { io } = socketsData;
+
+    const friendSocket = global.participants.find((participant) =>
+      Number(participant.userId) === Number(urlParams.userId));
 
     if (userData) {
       models.UsersFriends.create({
@@ -184,6 +202,9 @@ class UsersFriendsController extends Controller {
           friend_id: userData.user_id,
           accepted: 2
         }).then(() => {
+          if (friendSocket && friendSocket.socketId) {
+            io.sockets.connected[friendSocket.socketId].emit('adding_new_friend', userData);
+          }
           this.setResponseData({ response: { success: true } });
           this.returnInformation();
         });

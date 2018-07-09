@@ -10,9 +10,15 @@ const aclMiddleware = require('../middlewares/aclMiddleware');
 const urlParamsMiddleware = require('../middlewares/urlParamsMiddleware');
 const urlConditionsMiddleware = require('../middlewares/urlConditionsMiddleware');
 
-// const notFoundRouter = require('./notFoundRouter');
+const routesList = (app, io, participants) => {
+  app.use((req, res, next) => {
+    req.socketsData = {
+      io,
+      participants
+    };
+    next();
+  });
 
-const routesList = (app, sequelize) => {
   app.use(aclMiddleware);
   app.use(urlParamsMiddleware);
   app.use(urlConditionsMiddleware);
