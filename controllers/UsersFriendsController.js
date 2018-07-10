@@ -192,6 +192,12 @@ class UsersFriendsController extends Controller {
       Number(participant.userId) === Number(urlParams.userId));
 
     if (userData) {
+      models.UsersFriends.destroy({
+        where: {
+          user_id: userData.user_id,
+          friend_id: urlParams.userId,
+        }
+      }).catch(() => {});
       models.UsersFriends.create({
         user_id: userData.user_id,
         friend_id: urlParams.userId,
