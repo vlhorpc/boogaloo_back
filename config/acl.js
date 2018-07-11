@@ -26,7 +26,8 @@ const acl = [
       { resource: 'sign', methods: ['GET', 'POST'] },
       { resource: 'users', methods: ['*'] },
       { resource: 'users_friends', methods: ['*'] },
-      { resource: 'search', methods: ['*'] }
+      { resource: 'search', methods: ['*'] },
+      { resource: 'chats', methods: ['*'] },
     ]
   }
 ];

@@ -12,6 +12,8 @@ module.exports = {
         },
         admin_id: Sequelize.INTEGER,
         name: Sequelize.STRING,
+        chat_type: Sequelize.STRING,
+        last_message_time: Sequelize.DATE,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
       }
