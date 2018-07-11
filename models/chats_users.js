@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: 'id',
       as: 'user'
     });
-    models.ChatsUsers.hasMany(models.Chats, {
+    models.ChatsUsers.belongsTo(models.Chats, {
       foreignKey: 'chat_id',
       sourceKey: 'id',
       as: 'chats'

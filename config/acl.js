@@ -6,7 +6,9 @@ const acl = [
       { resource: 'sign', methods: ['*'] },
       { resource: 'users', methods: ['*'] },
       { resource: 'dishes', methods: ['*'] },
-      { resource: 'search', methods: ['*'] }
+      { resource: 'search', methods: ['*'] },
+      { resource: 'chats', methods: ['*'] },
+      { resource: 'chats', methods: ['*'] }
     ]
   },
   {
@@ -16,7 +18,8 @@ const acl = [
       { resource: 'sign', methods: ['*'] },
       { resource: 'users', methods: ['GET'] },
       { resource: 'search', methods: ['*'] },
-      { resource: 'users_friends', methods: ['*'] }
+      { resource: 'users_friends', methods: ['*'] },
+      { resource: 'chats', methods: ['*'] }
     ]
   },
   {
@@ -27,7 +30,7 @@ const acl = [
       { resource: 'users', methods: ['*'] },
       { resource: 'users_friends', methods: ['*'] },
       { resource: 'search', methods: ['*'] },
-      { resource: 'chats', methods: ['*'] },
+      { resource: 'chats', methods: ['GET'] }
     ]
   }
 ];

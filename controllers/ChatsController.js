@@ -23,15 +23,78 @@ class ChatsController extends Controller {
   }
 
   postAction() {
-    this.res.json('putAction');
+    const { req, res } = this;
+    const { urlParams } = req;
+
+    if (urlParams.type === 'group') {
+      return this.createGroupChat(req, res);
+    }
+    return this.createPrivateChat(req, res);
   }
 
-  postAction() {
-    this.res.json('postAction');
+  putAction() {
+    const { userData, body: bodyParams } = this.req;
+
+    models.Chats.findOne({
+      where: {
+        id: bodyParams.chatId
+      }
+    }).then((chat) => {
+      if (chat) {
+        if (chat.admin_id === userData.user_id) {
+
+          chat.name = bodyParams.name;
+
+          chat.save()
+            .then((savedChat) => {
+              this.response = savedChat;
+              return this.returnInformation();
+            })
+            .catch((err) => this.res.json(err));
+        } else {
+          this.code = 403;
+          return this.returnInformation();
+        }
+      } else {
+        this.code = 404;
+        this.returnInformation();
+      }
+    });
   }
 
   deleteAction() {
     this.res.json('deleteAction');
+  }
+
+  createPrivateChat(req, res) {
+    const { urlParams, userData } = req;
+
+    models.Chats.create({
+      admin_id: userData.user_id,
+      name: null,
+      chat_type: 'private',
+      last_message_time: new Date()
+    }).then((createdChat) => {
+      const promises = [];
+
+      promises.push(models.ChatsUsers.create({
+        chat_id: createdChat.id,
+        user_id: userData.user_id
+      }));
+      promises.push(models.ChatsUsers.create({
+        chat_id: createdChat.id,
+        user_id: urlParams.userId
+      }));
+
+      return Promise.all(promises).then(() => {
+        this.response = createdChat;
+        this.returnInformation();
+      });
+    });
+  }
+
+  createGroupChat(req, res) {
+    res.json('createGroupChat');
   }
 }
 

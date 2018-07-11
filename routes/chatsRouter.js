@@ -5,8 +5,8 @@ const chatsRouter = express.Router();
 
 chatsRouter.route('/')
   .get((req, res) => (new ChatsController(req, res)).getAction())
-  .put((req, res) => (new ChatsController(req, res)).putAction())
   .post((req, res) => (new ChatsController(req, res)).postAction())
+  .put((req, res) => (new ChatsController(req, res)).putAction())
   .delete((req, res) => (new ChatsController(req, res)).deleteAction());
 
 module.exports = chatsRouter;
