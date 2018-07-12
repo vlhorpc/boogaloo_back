@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: 'id',
       as: 'admin'
     });
+    models.Chats.hasMany(models.ChatsUsers, {
+      foreignKey: 'chat_id',
+      sourceKey: 'id',
+      as: 'users'
+    });
   };
 
   return Chats;

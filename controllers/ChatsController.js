@@ -12,14 +12,13 @@ class ChatsController extends Controller {
   }
 
   getAction() {
-    return this.res.json('getAction');
-    // const { token, userId } = this.req.urlParams;
+    const { req, res } = this;
+    const { urlParams } = req;
 
-    // if (token && userId) {
-    //   this.checkToken(this.req, this.res);
-    // } else {
-    //   this.loginUser(this.req, this.res);
-    // }
+    if (urlParams.userId) {
+      return this.returnChatsListByUserId(req, res);
+    }
+    return this.returnChatsByConditions(req, res);
   }
 
   postAction() {
@@ -64,6 +63,44 @@ class ChatsController extends Controller {
 
   deleteAction() {
     this.res.json('deleteAction');
+  }
+
+  returnChatsListByUserId(req) {
+    const { urlParams } = req;
+    const { userId } = urlParams;
+
+    models.Chats.findAndCountAll({
+      attributes: ['id', 'admin_id', 'name', 'last_message_time'],
+      include: [{
+        model: models.ChatsUsers, as: 'users', where: { user_id: [userId] }
+      }]
+    }).then((chats) => {
+      this.total = chats.count;
+      this.response = chats.rows;
+      this.code = chats.count > 0 ? this.code : 404;
+      this.returnInformation();
+    });
+  }
+
+  returnChatsByConditions(req, res) {
+    const { urlParams } = req;
+    const {
+      limit, offset, relations, where, order
+    } = urlParams;
+
+    models.Chats.findAndCountAll({
+      include: relations,
+      offset: Number(offset) || 0,
+      limit: Number(limit) || 10,
+      where,
+      order: order && order.orderData
+        ? order.orderFunction(order.orderData, 'Chats', models.sequelize) : null
+    }).then((chats) => {
+      this.total = chats.count;
+      this.response = chats.rows;
+      this.code = chats.count > 0 ? this.code : 404;
+      this.returnInformation();
+    });
   }
 
   createPrivateChat(req, res) {
