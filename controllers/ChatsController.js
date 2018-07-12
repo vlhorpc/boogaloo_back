@@ -66,20 +66,25 @@ class ChatsController extends Controller {
   }
 
   returnChatsListByUserId(req) {
-    const { urlParams } = req;
+    const { urlParams, userData } = req;
     const { userId } = urlParams;
 
-    models.Chats.findAndCountAll({
-      attributes: ['id', 'admin_id', 'name', 'last_message_time'],
-      include: [{
-        model: models.ChatsUsers, as: 'users', where: { user_id: [userId] }
-      }]
-    }).then((chats) => {
-      this.total = chats.count;
-      this.response = chats.rows;
-      this.code = chats.count > 0 ? this.code : 404;
+    if (Number(userId) === Number(userData.user_id)) {
+      models.ChatsUsers.findAndCountAll({
+        attributes: ['chat_id'],
+        where: {
+          user_id: userId
+        }
+      }).then((chats) => {
+        this.total = chats.count;
+        this.response = chats.rows;
+        this.code = chats.count > 0 ? this.code : 404;
+        this.returnInformation();
+      });
+    } else {
+      this.code = 403;
       this.returnInformation();
-    });
+    }
   }
 
   returnChatsByConditions(req, res) {
