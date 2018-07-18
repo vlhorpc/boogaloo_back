@@ -52,7 +52,8 @@ io.on('connection', (socket) => {
   socket.on('connect_new_user', (data) => {
     const newParticipant = {
       socketId: socket.id,
-      userId: data
+      userId: data.userId,
+      chats: data.chats
     };
 
     global.participants.push(newParticipant);

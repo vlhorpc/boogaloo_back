@@ -12,7 +12,7 @@ module.exports = {
         },
         chat_id: Sequelize.INTEGER,
         user_id: Sequelize.INTEGER,
-        message: Sequelize.INTEGER,
+        message: Sequelize.TEXT,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
       }
