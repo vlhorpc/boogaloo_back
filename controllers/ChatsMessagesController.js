@@ -31,7 +31,7 @@ class ChatsMessagesController extends Controller {
             limit: Number(limit) || 10,
             offset: Number(offset) || 0,
             order: [
-              ['createdAt', 'ASC']
+              ['id', 'DESC']
             ]
           })
           .then((messages) => {
