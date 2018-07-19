@@ -60,6 +60,26 @@ io.on('connection', (socket) => {
     console.log('connect_new_user participants', global.participants);
   });
 
+  socket.on('user_printing_message_start', (data) => {
+    const currentChatParticipants = global.participants.filter(participant =>
+      participant.chats.includes(Number(data.chatId)));
+
+    currentChatParticipants.forEach((participant) => {
+      io.sockets.connected[participant.socketId]
+        .emit('user_printing_message_in_chat_start', data);
+    });
+  });
+
+  socket.on('user_printing_message_stop', (data) => {
+    const currentChatParticipants = global.participants.filter(participant =>
+      participant.chats.includes(Number(data.chatId)));
+
+    currentChatParticipants.forEach((participant) => {
+      io.sockets.connected[participant.socketId]
+        .emit('user_printing_message_in_chat_stop', data);
+    });
+  });
+
   socket.on('disconnect_user', (data) => {
     global.participants = global.participants.filter(participant => participant.userId !== data);
   });
