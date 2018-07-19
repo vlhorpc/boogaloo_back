@@ -31,7 +31,7 @@ class ChatsMessagesController extends Controller {
             limit: Number(limit) || 10,
             offset: Number(offset) || 0,
             order: [
-              ['createdAt', 'DESC']
+              ['createdAt', 'ASC']
             ]
           })
           .then((messages) => {
@@ -54,7 +54,11 @@ class ChatsMessagesController extends Controller {
 
   postAction() {
     const { req, res } = this;
-    const { userData, urlParams, body: bodyParams } = req;
+    const { userData, urlParams, body: bodyParams, socketsData } = req;
+    const { io } = socketsData;
+
+    const currentChatParticipants = global.participants.filter(participant =>
+      participant.chats.includes(Number(bodyParams.chat_id)));
 
     models.ChatsUsers.find({
       where: {
@@ -68,6 +72,10 @@ class ChatsMessagesController extends Controller {
 
         models.ChatsMessages.create(messageInformation)
           .then((createdMessage) => {
+            currentChatParticipants.forEach((participant) => {
+              io.sockets.connected[participant.socketId].emit('new_message', createdMessage);
+            });
+
             this.setResponseData({ response: createdMessage });
             return this.returnInformation();
           })
