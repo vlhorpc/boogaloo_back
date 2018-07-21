@@ -56,6 +56,14 @@ io.on('connection', (socket) => {
       chats: data.chats
     };
 
+    const currentUserPaticipant =
+      global.participants.find(participant => participant.userId === data.userId);
+
+    if (currentUserPaticipant) {
+      global.participants =
+        global.participants.filter(participant => participant.userId !== data.userId);
+    }
+
     global.participants.push(newParticipant);
     console.log('connect_new_user participants', global.participants);
   });
@@ -65,8 +73,10 @@ io.on('connection', (socket) => {
       participant.chats.includes(Number(data.chatId)));
 
     currentChatParticipants.forEach((participant) => {
-      io.sockets.connected[participant.socketId]
-        .emit('user_printing_message_in_chat_start', data);
+      if (io.sockets.connected[participant.socketId]) {
+        io.sockets.connected[participant.socketId]
+          .emit('user_printing_message_in_chat_start', data);
+      }
     });
   });
 
@@ -75,8 +85,10 @@ io.on('connection', (socket) => {
       participant.chats.includes(Number(data.chatId)));
 
     currentChatParticipants.forEach((participant) => {
-      io.sockets.connected[participant.socketId]
-        .emit('user_printing_message_in_chat_stop', data);
+      if (io.sockets.connected[participant.socketId]) {
+        io.sockets.connected[participant.socketId]
+          .emit('user_printing_message_in_chat_stop', data);
+      }
     });
   });
 

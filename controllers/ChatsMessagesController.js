@@ -72,6 +72,15 @@ class ChatsMessagesController extends Controller {
 
         models.ChatsMessages.create(messageInformation)
           .then((createdMessage) => {
+            models.Chats.find({
+              where: {
+                id: bodyParams.chat_id
+              }
+            }).then((chatObject) => {
+              chatObject.last_message_time = moment();
+              chatObject.save();
+            })
+
             currentChatParticipants.forEach((participant) => {
               io.sockets.connected[participant.socketId].emit('new_message', createdMessage);
             });
