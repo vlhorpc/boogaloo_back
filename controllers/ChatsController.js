@@ -109,7 +109,11 @@ class ChatsController extends Controller {
   }
 
   createPrivateChat(req, res) {
-    const { urlParams, userData } = req;
+    const { urlParams, userData, socketsData } = req;
+    const { io } = socketsData;
+
+    const currentChatParticipant = global.participants.find(participant =>
+      Number(participant.userId) === Number(urlParams.userId));
 
     models.Chats.create({
       admin_id: userData.user_id,
@@ -127,6 +131,10 @@ class ChatsController extends Controller {
         chat_id: createdChat.id,
         user_id: urlParams.userId
       }));
+
+      if (currentChatParticipant) {
+        io.sockets.connected[currentChatParticipant.socketId].emit('add_new_chat_to_user', createdChat.id);
+      }
 
       return Promise.all(promises).then(() => {
         this.response = createdChat;
