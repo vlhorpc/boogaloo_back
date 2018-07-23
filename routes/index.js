@@ -29,8 +29,8 @@ const routesList = (app, io, participants) => {
   app.use('/chats', chatsRouter);
   app.use('/chats_messages', chatsMessagesRouter);
   app.use('/users', usersRouter);
-  app.use('/dishes', dishRouter);
-  app.use('/promotions', promoRouter);
+  // app.use('/dishes', dishRouter);
+  // app.use('/promotions', promoRouter);
   app.use('/users_friends', usersFriendsRouter);
   app.use('/search', searchRouter);
   app.use('/users_online', usersOnlineRouter);

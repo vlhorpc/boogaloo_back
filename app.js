@@ -65,6 +65,22 @@ io.on('connection', (socket) => {
     }
 
     global.participants.push(newParticipant);
+
+    const newParticipantChats = global.participants.filter((participant) => {
+      let isToReturn = false;
+
+      participant.chats.forEach(chatId => {
+        if (data && data.chats && data.chats.includes(chatId)) {
+          isToReturn = true;
+        }
+      });
+
+      return isToReturn;
+    });
+
+    newParticipantChats.forEach((participant) => {
+      io.sockets.connected[participant.socketId].emit('new_user_online', data.userId);
+    });
     console.log('connect_new_user participants', global.participants);
   });
 
@@ -93,6 +109,24 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect_user', (data) => {
+    const userDisconnecting = global.participants.find(participant => participant.userId === data);
+    const newParticipantChats = global.participants.filter((participant) => {
+      let isToReturn = false;
+
+      participant.chats.forEach(chatId => {
+        if (userDisconnecting && userDisconnecting.chats
+          && userDisconnecting.chats.includes(chatId)) {
+          isToReturn = true;
+        }
+      });
+
+      return isToReturn;
+    });
+
+    newParticipantChats.forEach((participant) => {
+      io.sockets.connected[participant.socketId].emit('new_user_offline', userDisconnecting.userId);
+    });
+
     global.participants = global.participants.filter(participant => participant.userId !== data);
   });
 });
