@@ -9,7 +9,8 @@ const acl = [
       { resource: 'search', methods: ['*'] },
       { resource: 'chats', methods: ['*'] },
       { resource: 'chats', methods: ['*'] },
-      { resource: 'chats_messages', methods: ['*'] }
+      { resource: 'chats_messages', methods: ['*'] },
+      { resource: 'users_online', methods: ['*'] }
     ]
   },
   {
@@ -21,7 +22,8 @@ const acl = [
       { resource: 'search', methods: ['*'] },
       { resource: 'users_friends', methods: ['*'] },
       { resource: 'chats', methods: ['*'] },
-      { resource: 'chats_messages', methods: ['*'] }
+      { resource: 'chats_messages', methods: ['*'] },
+      { resource: 'users_online', methods: ['*'] }
     ]
   },
   {
@@ -33,7 +35,8 @@ const acl = [
       { resource: 'users_friends', methods: ['*'] },
       { resource: 'search', methods: ['*'] },
       { resource: 'chats', methods: ['GET'] },
-      { resource: 'chats_messages', methods: ['*'] }
+      { resource: 'chats_messages', methods: ['*'] },
+      { resource: 'users_online', methods: ['*'] }
     ]
   }
 ];

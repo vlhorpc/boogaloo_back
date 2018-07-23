@@ -7,6 +7,7 @@ const usersFriendsRouter = require('./usersFriendsRouter');
 const searchRouter = require('./searchRouter');
 const chatsRouter = require('./chatsRouter');
 const chatsMessagesRouter = require('./chatsMessagesRouter');
+const usersOnlineRouter = require('./usersOnlineRouter');
 
 const aclMiddleware = require('../middlewares/aclMiddleware');
 const urlParamsMiddleware = require('../middlewares/urlParamsMiddleware');
@@ -32,7 +33,7 @@ const routesList = (app, io, participants) => {
   app.use('/promotions', promoRouter);
   app.use('/users_friends', usersFriendsRouter);
   app.use('/search', searchRouter);
-  app.use('/search', searchRouter);
+  app.use('/users_online', usersOnlineRouter);
   app.use('/', indexRouter);
 
 
