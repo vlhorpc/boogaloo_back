@@ -16,6 +16,9 @@ module.exports = {
       status: Sequelize.INTEGER,
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE
+    },
+    {
+      charset: 'utf8_general_ci'
     }
   ),
 

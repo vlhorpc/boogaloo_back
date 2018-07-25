@@ -13,6 +13,9 @@ module.exports = {
         expire_date: Sequelize.DATE,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
+      },
+      {
+        charset: 'utf8_general_ci'
       }
     );
     queryInterface.addConstraint('users_tokens', ['user_id'], {

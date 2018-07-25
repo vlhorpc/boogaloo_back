@@ -20,6 +20,9 @@ module.exports = {
         absolute_href: Sequelize.STRING,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
+      },
+      {
+        charset: 'utf8_general_ci'
       }
     );
     queryInterface.addConstraint('users_images', ['user_id'], {

@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     admin_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     chat_type: DataTypes.STRING,
+    last_message: DataTypes.TEXT,
+    last_message_id: DataTypes.INTEGER,
     last_message_time: DataTypes.DATE,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
@@ -25,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'chat_id',
       sourceKey: 'id',
       as: 'users'
+    });
+    models.Chats.belongsTo(models.ChatsMessages, {
+      foreignKey: 'last_message_id',
+      sourceKey: 'id',
+      as: 'message'
     });
   };
 

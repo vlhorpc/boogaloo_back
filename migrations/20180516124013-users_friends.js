@@ -18,6 +18,9 @@ module.exports = {
         },
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
+      },
+      {
+        charset: 'utf8_general_ci'
       }
     );
     queryInterface.addConstraint('users_friends', ['user_id'], {

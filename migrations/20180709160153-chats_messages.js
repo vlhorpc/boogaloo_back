@@ -15,6 +15,9 @@ module.exports = {
         message: Sequelize.TEXT,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
+      },
+      {
+        charset: 'utf8_general_ci'
       }
     );
     queryInterface.addConstraint('chats_messages', ['chat_id'], {

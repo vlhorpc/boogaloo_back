@@ -79,7 +79,9 @@ io.on('connection', (socket) => {
     });
 
     newParticipantChats.forEach((participant) => {
-      io.sockets.connected[participant.socketId].emit('new_user_online', data.userId);
+      if (participant && participant.socketId) {
+        io.sockets.connected[participant.socketId].emit('new_user_online', data.userId);
+      }
     });
     console.log('connect_new_user participants', global.participants);
   });
@@ -124,7 +126,9 @@ io.on('connection', (socket) => {
     });
 
     newParticipantChats.forEach((participant) => {
-      io.sockets.connected[participant.socketId].emit('new_user_offline', userDisconnecting.userId);
+      if (participant && participant.socketId) {
+        io.sockets.connected[participant.socketId].emit('new_user_offline', userDisconnecting.userId);
+      }
     });
 
     global.participants = global.participants.filter(participant => participant.userId !== data);

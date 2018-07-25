@@ -14,6 +14,9 @@ module.exports = {
         user_id: Sequelize.INTEGER,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
+      },
+      {
+        charset: 'utf8_general_ci'
       }
     );
     queryInterface.addConstraint('chats_users', ['chat_id'], {

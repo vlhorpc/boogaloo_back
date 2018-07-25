@@ -78,6 +78,8 @@ class ChatsMessagesController extends Controller {
               }
             }).then((chatObject) => {
               chatObject.last_message_time = moment();
+              chatObject.last_message_id = createdMessage.id;
+              chatObject.last_message = createdMessage.message;
               chatObject.save();
             })
 
