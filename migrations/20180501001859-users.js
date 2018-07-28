@@ -18,7 +18,8 @@ module.exports = {
       updatedAt: Sequelize.DATE
     },
     {
-      charset: 'utf8_general_ci'
+      charset: 'utf8',
+      collate: 'utf8_unicode_ci'
     }
   ),
 

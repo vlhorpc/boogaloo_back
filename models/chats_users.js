@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     chat_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
+    last_read_message_id: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   }, {
