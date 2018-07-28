@@ -81,7 +81,10 @@ class ChatsMessagesController extends Controller {
               chatObject.last_message_id = createdMessage.id;
               chatObject.last_message = createdMessage.message;
               chatObject.save();
-            })
+            }).then(() => {
+              currentChat.last_read_message_id = createdMessage.id;
+              currentChat.save();
+            });
 
             currentChatParticipants.forEach((participant) => {
               io.sockets.connected[participant.socketId].emit('new_message', createdMessage);
