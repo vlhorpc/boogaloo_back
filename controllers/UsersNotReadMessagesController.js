@@ -28,16 +28,26 @@ class UsersNotReadMessagesController extends Controller {
           models.ChatsMessages.findAndCountAll({
             where: {
               id: {
-                $between: [item.last_read_message_id, item.chats.last_message_id]
+                $and: [
+                  {
+                    $between: [item.last_read_message_id, item.chats.last_message_id]
+                  },
+                  {
+                    $ne: item.last_read_message_id
+                  }
+                ]
               },
               chat_id: item.chat_id
             }
           }).then((notReadMessages) => {
+            const idsList = notReadMessages.rows.map(notReadMessage => notReadMessage.id);
+
             let responseData = {
               chatId: item.chat_id,
-              messagesCount: notReadMessages.count - 1
+              messagesCount: notReadMessages.count,
+              idsList
             };
-            totalNotReadMessages += notReadMessages.count - 1;
+            totalNotReadMessages += notReadMessages.count;
             resultInformation.push(responseData);
           })
         );
