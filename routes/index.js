@@ -8,6 +8,7 @@ const searchRouter = require('./searchRouter');
 const chatsRouter = require('./chatsRouter');
 const chatsMessagesRouter = require('./chatsMessagesRouter');
 const usersOnlineRouter = require('./usersOnlineRouter');
+const usersNotReadMessagesRouter = require('./usersNotReadMessagesRouter');
 
 const aclMiddleware = require('../middlewares/aclMiddleware');
 const urlParamsMiddleware = require('../middlewares/urlParamsMiddleware');
@@ -34,6 +35,7 @@ const routesList = (app, io, participants) => {
   app.use('/users_friends', usersFriendsRouter);
   app.use('/search', searchRouter);
   app.use('/users_online', usersOnlineRouter);
+  app.use('/users_not_read_messages', usersNotReadMessagesRouter);
   app.use('/', indexRouter);
 
 

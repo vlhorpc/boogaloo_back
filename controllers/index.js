@@ -5,6 +5,7 @@ const UsersController = require('./UsersController');
 const ChatsController = require('./ChatsController');
 const ChatsMessagesController = require('./ChatsMessagesController');
 const UsersOnlineController = require('./UsersOnlineController');
+const UsersNotReadMessagesController = require('./UsersNotReadMessagesController');
 
 module.exports = {
   SignController,
@@ -13,5 +14,6 @@ module.exports = {
   UsersController,
   ChatsController,
   ChatsMessagesController,
-  UsersOnlineController
+  UsersOnlineController,
+  UsersNotReadMessagesController
 };
