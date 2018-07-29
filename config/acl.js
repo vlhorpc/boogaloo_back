@@ -11,7 +11,8 @@ const acl = [
       { resource: 'chats', methods: ['*'] },
       { resource: 'chats_messages', methods: ['*'] },
       { resource: 'users_online', methods: ['*'] },
-      { resource: 'users_not_read_messages', methods: ['*'] }
+      { resource: 'users_not_read_messages', methods: ['*'] },
+      { resource: 'chats_users', methods: ['*'] }
     ]
   },
   {
@@ -25,7 +26,8 @@ const acl = [
       { resource: 'chats', methods: ['*'] },
       { resource: 'chats_messages', methods: ['*'] },
       { resource: 'users_online', methods: ['*'] },
-      { resource: 'users_not_read_messages', methods: ['*'] }
+      { resource: 'users_not_read_messages', methods: ['*'] },
+      { resource: 'chats_users', methods: ['*'] }
     ]
   },
   {
