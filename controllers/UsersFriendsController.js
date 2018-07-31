@@ -233,17 +233,14 @@ class UsersFriendsController extends Controller {
           friend_id: urlParams.friendId
         }
       }).then(() => {
-        models.UsersFriends.findOne({
+        models.UsersFriends.destroy({
           where: {
             user_id: urlParams.friendId,
             friend_id: userData.user_id
           }
-        }).then((element) => {
-          element.accepted = -1;
-          element.save().then(() => {
-            this.setResponseData({ response: { success: true } });
-            this.returnInformation();
-          });
+        }).then(() => {
+          this.setResponseData({ response: { success: true } });
+          this.returnInformation();
         });
       }).catch((err) => {
         this.res.json(err);
