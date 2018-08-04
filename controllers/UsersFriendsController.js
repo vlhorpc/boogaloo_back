@@ -133,11 +133,18 @@ class UsersFriendsController extends Controller {
     models.UsersFriends.findAndCountAll({
       where: {
         user_id: userData.user_id,
-        accepted: 1
+        accepted: {
+          $in: [0, 1]
+        }
       }
     }).then((friends) => {
       const idsList = friends && friends.rows && friends.rows.length
-        ? friends.rows.map(friend => friend.friend_id)
+        ? friends.rows.map(friend =>
+          ({
+            userId: friend.friend_id,
+            accepted: friend.accepted
+          })
+        )
         : [];
       this.setResponseData({ response: { idsList, total: friends.count }, total: friends.count });
       this.returnInformation();

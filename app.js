@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
     });
 
     newParticipantChats.forEach((participant) => {
-      if (participant && participant.socketId) {
+      if (participant && participant.socketId && io.sockets.connected[participant.socketId]) {
         io.sockets.connected[participant.socketId].emit('new_user_online', data.userId);
       }
     });
@@ -126,7 +126,7 @@ io.on('connection', (socket) => {
     });
 
     newParticipantChats.forEach((participant) => {
-      if (participant && participant.socketId) {
+      if (participant && participant.socketId && io.sockets.connected[participant.socketId]) {
         io.sockets.connected[participant.socketId].emit('new_user_offline', userDisconnecting.userId);
       }
     });
