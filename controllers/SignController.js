@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const url = require('url');
 const moment = require('moment');
 const Controller = require('./Controller');
+const UsersController = require('./UsersController');
 
 class SignController extends Controller {
   constructor(req, res) {
@@ -47,6 +48,9 @@ class SignController extends Controller {
         }
         bodyParams.password = hashedPassword;
         models.Users.create(bodyParams).then((createdUser) => {
+          const usersController = new UsersController();
+          usersController.indexUserByUserId(createdUser.id);
+
           this.response = createdUser;
           this.returnInformation();
         });
