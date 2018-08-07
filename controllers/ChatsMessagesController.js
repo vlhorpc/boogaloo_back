@@ -24,7 +24,7 @@ class ChatsMessagesController extends Controller {
     }).then((currentChat) => {
       if (currentChat) {
         models.ChatsMessages
-          .findAll({
+          .findAndCountAll({
             where: {
               chat_id: urlParams.chat_id
             },
@@ -35,7 +35,7 @@ class ChatsMessagesController extends Controller {
             ]
           })
           .then((messages) => {
-            this.setResponseData({ response: messages });
+            this.setResponseData({ response: messages.rows, total: messages.count });
             return this.returnInformation();
           })
           .catch(() => {
