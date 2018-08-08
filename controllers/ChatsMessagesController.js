@@ -112,7 +112,47 @@ class ChatsMessagesController extends Controller {
   }
 
   deleteAction() {
-    this.res.json('deleteAction');
+    const { req } = this;
+    const { userData, urlParams } = req;
+
+    const currentChatParticipants = global.participants.filter(participant =>
+      participant.chats.includes(Number(urlParams.chatId)));
+
+    // Check if user in current chat
+    models.ChatsUsers.find({
+      where: {
+        user_id: userData.user_id,
+        chat_id: urlParams.chatId
+      }
+    }).then((currentChat) => {
+      if (currentChat) {
+        models.ChatsMessages.destroy({
+          where: {
+            id: {
+              $in: [urlParams.messagesIds.split(',')]
+            }
+          }
+        })
+          .then((deletedMessage) => {
+            currentChatParticipants.forEach((participant) => {
+              io.sockets.connected[participant.socketId].emit('deleted_message', deletedMessage);
+            });
+
+            this.setResponseData({ response: deletedMessage });
+            return this.returnInformation();
+          })
+          .catch(() => {
+            this.code = 422;
+            return this.returnInformation();
+          });
+      } else {
+        this.code = 404;
+        return this.returnInformation();
+      }
+    }).catch(() => {
+      this.code = 404;
+      return this.returnInformation();
+    });
   }
 }
 
