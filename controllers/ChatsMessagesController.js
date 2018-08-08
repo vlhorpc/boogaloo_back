@@ -113,7 +113,8 @@ class ChatsMessagesController extends Controller {
 
   deleteAction() {
     const { req } = this;
-    const { userData, urlParams } = req;
+    const { userData, urlParams, socketsData } = req;
+    const { io } = socketsData;
 
     const currentChatParticipants = global.participants.filter(participant =>
       participant.chats.includes(Number(urlParams.chatId)));
@@ -133,12 +134,15 @@ class ChatsMessagesController extends Controller {
             }
           }
         })
-          .then((deletedMessage) => {
+          .then(() => {
+            const responseData = {
+              idsList: urlParams.messagesIds
+            };
             currentChatParticipants.forEach((participant) => {
-              io.sockets.connected[participant.socketId].emit('deleted_message', deletedMessage);
+              io.sockets.connected[participant.socketId].emit('deleted_message', responseData);
             });
 
-            this.setResponseData({ response: deletedMessage });
+            this.setResponseData({ response: responseData });
             return this.returnInformation();
           })
           .catch(() => {
