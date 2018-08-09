@@ -45,8 +45,8 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 
 global.participants = [];
-console.log('participants app', global.participants);
 
+// @TODO: sockets to separate file
 
 io.on('connection', (socket) => {
   socket.on('connect_new_user', (data) => {
